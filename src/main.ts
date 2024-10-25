@@ -1,7 +1,12 @@
-import { app, BrowserWindow, desktopCapturer, session } from 'electron';
+import { app, BrowserWindow, desktopCapturer, session, protocol } from 'electron';
 import path from 'path';
 
-if (require('electron-squirrel-startup')) {
+// @ts-expect-error -> In vite there are no types for the following line. Electron forge error
+import squirrelStartup from 'electron-squirrel-startup';
+
+app.setAsDefaultProtocolClient('bananas')
+
+if (squirrelStartup) {
   app.quit();
 }
 
