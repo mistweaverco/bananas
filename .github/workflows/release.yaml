@@ -1,0 +1,88 @@
+---
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up env
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install node dependencies
+        run: npm ci
+      - name: Build Linux
+        run: make linux
+      - name: Archive
+        run: make archives PLATFORM=linux VERSION=$VERSION
+      - name: Linux Release
+        run: make linux-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up env
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install node dependencies
+        run: npm ci
+      - name: Build Windows
+        shell: bash
+        run: make windows
+      - name: Windows Release
+        shell: bash
+        run: make windows-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build-macos:
+    name: Build MacOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # https://github.com/electron/forge/issues/2807
+      - name: Install python3-setuptools and bash
+        run: brew install python-setuptools bash
+      - name: Set up env
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install node dependencies
+        run: npm ci
+      - name: Build MacOS
+        run: make macos
+      - name: MacOS Release
+        run: make macos-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
