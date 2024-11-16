@@ -1,27 +1,34 @@
-<div align="center">
+# bananas2
 
-![Bananas Screen Sharing Logo](logo.svg)
+An Electron application with Svelte and TypeScript
 
-# Bananas Screen Sharing
+## Recommended IDE Setup
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/mistweaverco/bananas?style=for-the-badge)](https://github.com/mistweaverco/bananas/releases/latest)
+- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
 
-[Install](#install) • [Website](https://getbananas.net/)
+## Project Setup
 
-<p></p>
+### Install
 
-Bananas Screen Sharing is a simple and
-easy-to-use screen sharing tool for Mac, Windows, and Linux.
+```bash
+$ npm install
+```
 
-It utilizes a peer-to-peer connection to share your screen with others,
-without the need for an account or any server infrastructure.
+### Development
 
-<p></p>
+```bash
+$ npm run dev
+```
 
-</div>
+### Build
 
-## Install
+```bash
+# For windows
+$ npm run build:win
 
-Grab the latest release from the
-[GitHub releases page](https://github.com/mistweaverco/bananas/releases/latest).
+# For macOS
+$ npm run build:mac
 
+# For Linux
+$ npm run build:linux
+```
