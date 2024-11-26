@@ -1,57 +1,37 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { mayBeConnectionString, getOfferFromUrl, ConnectionType } from './Utils'
-  import WebRTC from './WebRTC.svelte'
-  let webRTCComponent: WebRTC
-  let connectionStringInput: HTMLInputElement
-  let connectionStringInputSuccess: HTMLParagraphElement
-  let connectionStringInputError: HTMLParagraphElement
-  let connectionStringInputIcon: HTMLElement
-  let connectButton: HTMLButtonElement
-  let copyButton: HTMLButtonElement
-  let toggleRemoteCursorsButton: HTMLButtonElement
-
-  let cursorsActive = false
-
-  const toggleRemoteCursors = (): void => {
-    cursorsActive = !cursorsActive
-    window.BananasApi.toggleRemoteCursors(cursorsActive)
-    webRTCComponent.ToggleRemoteCursors(cursorsActive)
+  import { onMount } from 'svelte';
+  import { mayBeConnectionString, getOfferFromUrl, ConnectionType } from './Utils';
+  import WebRTC from './WebRTC.svelte';
+  
+  let webRTCComponent: WebRTC;
+  let connectionString = '';
+  let isLoading = false;
+  
+  // Reactive declarations instead of manual class manipulation
+  $: isValid = mayBeConnectionString(ConnectionType.PARTICIPANT, connectionString);
+  $: inputState = connectionString ? (isValid ? 'success' : 'danger') : '';
+  $: iconClass = connectionString 
+    ? (isValid ? 'fa-check' : 'fa-times')
+    : 'fa-question';
+  
+  // Handlers as functions instead of inline event listeners
+  async function handleConnect() {
+    if (!isValid) return;
+    const offer = getOfferFromUrl(connectionString);
+    await webRTCComponent.Connect(offer);
   }
-
-  onMount(() => {
-    connectionStringInput.addEventListener('input', () => {
-      connectionStringInput.classList.remove('is-danger', 'is-success')
-      connectionStringInputIcon.classList.remove('fa-question', 'fa-check', 'fa-times')
-      if (mayBeConnectionString(ConnectionType.PARTICIPANT, connectionStringInput.value)) {
-        connectionStringInputSuccess.classList.remove('is-hidden')
-        connectionStringInputError.classList.add('is-hidden')
-        connectButton.disabled = false
-        connectionStringInput.classList.add('is-success')
-        connectionStringInputIcon.classList.add('fa-check')
-      } else {
-        connectionStringInput.classList.add('is-danger')
-        connectionStringInputSuccess.classList.add('is-hidden')
-        connectionStringInputError.classList.remove('is-hidden')
-        connectionStringInputIcon.classList.add('fa-times')
-        connectButton.disabled = true
-      }
-    })
-    connectButton.addEventListener('click', async () => {
-      const offer = getOfferFromUrl(connectionStringInput.value)
-      await webRTCComponent.Connect(offer)
-      toggleRemoteCursorsButton.classList.remove('is-hidden')
-    })
-    copyButton.addEventListener('click', async () => {
-      await webRTCComponent.Setup()
-      copyButton.classList.add('is-loading')
-      const offer = await webRTCComponent.CreateHostUrl()
-      navigator.clipboard.writeText(offer)
-      setTimeout(() => {
-        copyButton.classList.remove('is-loading')
-      }, 400)
-    })
-  })
+  
+  async function handleCopy() {
+    isLoading = true;
+    await webRTCComponent.Setup();
+    const offer = await webRTCComponent.CreateHostUrl();
+    await navigator.clipboard.writeText(offer);
+    
+    // Using a reactive statement instead of directly manipulating classes
+    setTimeout(() => {
+      isLoading = false;
+    }, 400);
+  }
 </script>
 
 <WebRTC bind:this={webRTCComponent} />
@@ -61,21 +41,25 @@
   <div class="form">
     <div class="field">
       <div class="control">
-        <button class="button is-link" bind:this={copyButton}>
-          <span class="icon">
-            <i class="fas fa-copy"></i>
-          </span>
-          <span>Copy my connection string</span>
+        <button 
+          class="button is-link"
+          class:is-loading={isLoading}
+          on:click={handleCopy}
+        >
+          Copy my connection string
         </button>
       </div>
     </div>
 
     <div class="field">
-      <label class="label" for="remote_connection_string">Participant connection string</label>
+      <label class="label" for="remote_connection_string">
+        Participant connection string
+      </label>
       <div class="control has-icons-left has-icons-right">
         <input
-          bind:this={connectionStringInput}
+          bind:value={connectionString}
           class="input"
+          class:is-{inputState}
           type="text"
           id="remote_connection_string"
         />
@@ -83,39 +67,27 @@
           <i class="fas fa-user"></i>
         </span>
         <span class="icon is-small is-right">
-          <i bind:this={connectionStringInputIcon} class="fas fa-question"></i>
+          <i class="fas {iconClass}"></i>
         </span>
       </div>
-      <p class="help is-success is-hidden" bind:this={connectionStringInputSuccess}>
-        Connection string seems valid.
-      </p>
-      <p class="help is-danger is-hidden" bind:this={connectionStringInputError}>
-        Connection string seems invalid.
-      </p>
+      {#if connectionString}
+        <p class="help" class:is-success={isValid} class:is-hidden={!isValid}>
+          Connection string seems valid.
+        </p>
+        <p class="help" class:is-danger={!isValid} class:is-hidden={isValid}>
+          Connection string seems invalid.
+        </p>
+      {/if}
     </div>
 
     <div class="field">
       <div class="control">
-        <button class="button is-link" bind:this={connectButton} disabled>
-          <span class="icon">
-            <i class="fas fa-link"></i>
-          </span>
-          <span>Connect</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="field">
-      <div class="control">
-        <button
-          bind:this={toggleRemoteCursorsButton}
-          class="button is-warning is-hidden"
-          on:click={toggleRemoteCursors}
+        <button 
+          class="button is-link" 
+          disabled={!isValid}
+          on:click={handleConnect}
         >
-          <span class="icon">
-            <i class="fas fa-mouse-pointer"></i>
-          </span>
-          <span>{cursorsActive ? 'Disable remote cursors' : 'Enable remote cursors'}</span>
+          Connect
         </button>
       </div>
     </div>
