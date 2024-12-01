@@ -2,6 +2,12 @@
 /// <reference types="vite/client" />
 import { ElectronAPI } from '@electron-toolkit/preload'
 
+type IceServer = {
+  urls: string
+  username?: string
+  credential?: string
+}
+
 declare global {
   interface Window {
     electron: ElectronAPI
@@ -18,9 +24,9 @@ declare global {
       updateSettings: (settings: {
         username: string
         color: string
-        punchHoleServers: string[]
+        iceServers: IceServer[]
       }) => Promise<void>
-      getSettings: () => Promise<{ username: string; color: string; punchHoleServers: string[] }>
+      getSettings: () => Promise<{ username: string; color: string; iceServers: IceServer[] }>
     }
   }
 }

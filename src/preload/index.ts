@@ -19,6 +19,12 @@ ipcRenderer.on('openBananasURL', (_, url) => {
   })
 })
 
+type IceServer = {
+  urls: string
+  username?: string
+  credential?: string
+}
+
 const BananasApi = {
   handleUrlClicks: (state: boolean | undefined): boolean => {
     if (state) HANDLE_URL_CLICKS = state
@@ -27,14 +33,14 @@ const BananasApi = {
   getSettings: async (): Promise<{
     username: string
     color: string
-    punchHoleServers: string[]
+    iceServers: IceServer[]
   }> => {
     return await ipcRenderer.invoke('getSettings')
   },
   updateSettings: async (settings: {
     username: string
     color: string
-    punchHoleServers: string[]
+    iceServers: IceServer[]
   }): Promise<void> => {
     ipcRenderer.invoke('updateSettings', settings)
   },

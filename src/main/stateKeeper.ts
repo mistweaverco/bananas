@@ -1,10 +1,16 @@
 import { screen } from 'electron'
 import settings from 'electron-settings'
 
+type IceServer = {
+  urls: string
+  username?: string
+  credential?: string
+}
+
 export type SettingsData = {
   username: string
   color: string
-  punchHoleServers: string[]
+  iceServers: IceServer[]
 }
 
 type Settings = {
@@ -28,7 +34,11 @@ export const settingsKeeper = async (): Promise<Settings> => {
   const defaultSettings: SettingsData = {
     username: 'Banana Joe',
     color: '#ffffff',
-    punchHoleServers: ['stun:stun.l.google.com:19302']
+    iceServers: [
+      {
+        urls: 'stun:stun.l.google.com:19302'
+      }
+    ]
   }
   const hasSettings = await settings.has('settings')
   if (hasSettings) {

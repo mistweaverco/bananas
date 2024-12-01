@@ -5,27 +5,26 @@
   let colorPreviewIcon: HTMLElement
   let usernameValue: string = 'Banana Joe'
   let colorValue: string = '#ffffff'
-  let punchHoleServersValue: string = 'stun:stun.l.google.com:19302'
+  let iceServersValue: string = '{ "urls": "stun:stun.l.google.com:19302" }'
   let isUsernameValid = false
   let isColorValid = false
-  let isPunchHoleServersValid = true
+  let isIceServersValid = true
   let modalSuccessIsActive = false
   let modalFailureIsActive = false
 
   $: colorValue, checkColor()
   $: usernameValue, checkUsername()
-  $: punchHoleServersValue, checkPunchHoleServers()
+  $: iceServersValue, checkIceServers()
 
-  const checkPunchHoleServers = (): void => {
-    const servers = punchHoleServersValue.split('\n')
-    isPunchHoleServersValid = servers.every((server) => {
-      const [protocol, host, port] = server.split(':')
-      if (protocol === 'stun' || protocol === 'turn') {
-        if (host && port) {
-          return true
-        }
+  const checkIceServers = (): void => {
+    const serversObjects = iceServersValue.split('\n')
+    isIceServersValid = serversObjects.every((serverObject) => {
+      try {
+        const srv = JSON.parse(serverObject)
+        return srv.urls && srv.urls.length > 0
+      } catch (e) {
+        return false
       }
-      return false
     })
   }
   const checkIsValidHexColor = (color: string): boolean => {
@@ -48,11 +47,11 @@
   }
   async function onSubmit(evt: Event): Promise<void> {
     evt.preventDefault()
-    if (isUsernameValid && isColorValid && isPunchHoleServersValid) {
+    if (isUsernameValid && isColorValid && isIceServersValid) {
       await window.BananasApi.updateSettings({
         username: usernameValue,
         color: colorValue,
-        punchHoleServers: punchHoleServersValue.split('\n')
+        iceServers: iceServersValue.split('\n').map((srv) => JSON.parse(srv))
       })
       modalSuccessIsActive = true
       setTimeout(() => {
@@ -69,7 +68,7 @@
     const settings = await window.BananasApi.getSettings()
     usernameValue = settings.username
     colorValue = settings.color
-    punchHoleServersValue = settings.punchHoleServers.join('\n')
+    iceServersValue = settings.iceServers.map((srv) => JSON.stringify(srv)).join('\n')
   })
 </script>
 
@@ -133,13 +132,13 @@
     <h2>Advanced</h2>
 
     <div class="field">
-      <label class="label" for="color">STUN/TURN Servers (separated by new lines)</label>
+      <label class="label" for="color">STUN/TURN Server Objects (separated by new lines)</label>
       <div class="control has-icons-left has-icons-right">
         <textarea
-          bind:value={punchHoleServersValue}
-          class="textarea {isPunchHoleServersValid ? 'is-success' : 'is-danger'}"
+          bind:value={iceServersValue}
+          class="textarea {isIceServersValid ? 'is-success' : 'is-danger'}"
           id="color"
-          placeholder="stun:stun.l.google.com:19302"
+          placeholder="&lbrace; &quot;urls&quot;: &quot;stun:stun.l.google.com:19302&quot; &rbrace;"
         />
       </div>
     </div>
