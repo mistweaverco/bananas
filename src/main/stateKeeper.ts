@@ -4,6 +4,7 @@ import settings from 'electron-settings'
 export type SettingsData = {
   username: string
   color: string
+  punchHoleServers: string[]
 }
 
 type Settings = {
@@ -24,15 +25,26 @@ type WindowStateKeeper = WindowState & {
 }
 
 export const settingsKeeper = async (): Promise<Settings> => {
+  const defaultSettings: SettingsData = {
+    username: 'Banana Joe',
+    color: '#ffffff',
+    punchHoleServers: ['stun:stun.l.google.com:19302']
+  }
   const hasSettings = await settings.has('settings')
   if (hasSettings) {
+    const data = (await settings.get('settings')) as unknown as SettingsData
     return {
-      get: (): SettingsData => settings.get('settings') as unknown as SettingsData,
+      get: (): SettingsData => {
+        return {
+          ...defaultSettings,
+          ...data
+        }
+      },
       set: (data: SettingsData) => settings.set('settings', data)
     }
   }
   return {
-    get: (): SettingsData => ({ username: 'Banana Joe', color: '#ffffff' }),
+    get: (): SettingsData => defaultSettings,
     set: (data: SettingsData) => settings.set('settings', data)
   }
 }

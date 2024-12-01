@@ -2,7 +2,7 @@
   import type { RTCSessionDescriptionOptions } from './Utils'
   import type { BananasRemoteCursorData } from './BananasTypes'
   import { getConnectionString, ConnectionType } from './Utils'
-  import { RTCPeerConnectionConfig } from './Config'
+  import { getRTCPeerConnectionConfig } from './Config'
 
   const errorHander = (e: ErrorEvent): void => {
     console.error(e)
@@ -76,7 +76,7 @@
       pc.close()
       pc = null
     }
-    pc = new RTCPeerConnection(RTCPeerConnectionConfig)
+    pc = new RTCPeerConnection(await getRTCPeerConnectionConfig())
     pc.ondatachannel = (e: RTCDataChannelEvent): void => {
       if (e.channel.label === 'remoteMouseCursorPositions') {
         setupDataChannel(e.channel)

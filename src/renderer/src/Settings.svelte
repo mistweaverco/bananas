@@ -3,16 +3,31 @@
   import ColorPicker from 'svelte-awesome-color-picker'
 
   let colorPreviewIcon: HTMLElement
-  let colorValue: string = '#ffffff'
   let usernameValue: string = 'Banana Joe'
-  let isColorValid = false
+  let colorValue: string = '#ffffff'
+  let punchHoleServersValue: string = 'stun:stun.l.google.com:19302'
   let isUsernameValid = false
+  let isColorValid = false
+  let isPunchHoleServersValid = true
   let modalSuccessIsActive = false
   let modalFailureIsActive = false
 
   $: colorValue, checkColor()
   $: usernameValue, checkUsername()
+  $: punchHoleServersValue, checkPunchHoleServers()
 
+  const checkPunchHoleServers = (): void => {
+    const servers = punchHoleServersValue.split('\n')
+    isPunchHoleServersValid = servers.every((server) => {
+      const [protocol, host, port] = server.split(':')
+      if (protocol === 'stun' || protocol === 'turn') {
+        if (host && port) {
+          return true
+        }
+      }
+      return false
+    })
+  }
   const checkIsValidHexColor = (color: string): boolean => {
     return /^#[0-9A-F]{6}$/i.test(color)
   }
@@ -33,8 +48,12 @@
   }
   async function onSubmit(evt: Event): Promise<void> {
     evt.preventDefault()
-    if (checkIsValidHexColor(colorValue) && usernameValue.length > 0 && usernameValue.length < 32) {
-      await window.BananasApi.updateSettings({ username: usernameValue, color: colorValue })
+    if (isUsernameValid && isColorValid && isPunchHoleServersValid) {
+      await window.BananasApi.updateSettings({
+        username: usernameValue,
+        color: colorValue,
+        punchHoleServers: punchHoleServersValue.split('\n')
+      })
       modalSuccessIsActive = true
       setTimeout(() => {
         modalSuccessIsActive = false
@@ -50,6 +69,7 @@
     const settings = await window.BananasApi.getSettings()
     usernameValue = settings.username
     colorValue = settings.color
+    punchHoleServersValue = settings.punchHoleServers.join('\n')
   })
 </script>
 
@@ -73,8 +93,9 @@
   </div>
 </div>
 
-<div class="container p-5">
+<div class="container p-5 content">
   <h1 class="title">Settings</h1>
+  <h2>Basic</h2>
   <form class="form" on:submit={onSubmit}>
     <div class="field">
       <label class="label" for="username">Username</label>
@@ -106,6 +127,20 @@
           <i bind:this={colorPreviewIcon} class="fas fa-palette"></i>
         </span>
         <ColorPicker bind:hex={colorValue} isTextInput={false} isAlpha={false} />
+      </div>
+    </div>
+
+    <h2>Advanced</h2>
+
+    <div class="field">
+      <label class="label" for="color">STUN/TURN Servers (separated by new lines)</label>
+      <div class="control has-icons-left has-icons-right">
+        <textarea
+          bind:value={punchHoleServersValue}
+          class="textarea {isPunchHoleServersValid ? 'is-success' : 'is-danger'}"
+          id="color"
+          placeholder="stun:stun.l.google.com:19302"
+        />
       </div>
     </div>
 

@@ -24,10 +24,18 @@ const BananasApi = {
     if (state) HANDLE_URL_CLICKS = state
     return HANDLE_URL_CLICKS
   },
-  getSettings: async (): Promise<{ username: string; color: string }> => {
+  getSettings: async (): Promise<{
+    username: string
+    color: string
+    punchHoleServers: string[]
+  }> => {
     return await ipcRenderer.invoke('getSettings')
   },
-  updateSettings: async (settings: { username: string; color: string }): Promise<void> => {
+  updateSettings: async (settings: {
+    username: string
+    color: string
+    punchHoleServers: string[]
+  }): Promise<void> => {
     ipcRenderer.invoke('updateSettings', settings)
   },
   toggleRemoteCursors: async (state: boolean): Promise<void> => {
