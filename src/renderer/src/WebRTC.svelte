@@ -102,10 +102,14 @@
     pc.oniceconnectionstatechange = function (): void {
       console.log('iceconnectionstatechange')
     }
-    audioStream = await navigator.mediaDevices.getUserMedia({
-      video: false,
-      audio: true
-    })
+    try {
+      audioStream = await navigator.mediaDevices.getUserMedia({
+        video: false,
+        audio: true
+      })
+    } catch (e) {
+      errorHander(e)
+    }
     if (!remoteVideo) {
       try {
         stream = await navigator.mediaDevices.getDisplayMedia({
@@ -115,15 +119,19 @@
         for (const track of stream.getTracks()) {
           pc.addTrack(track, stream)
         }
-        for (const track of audioStream.getTracks()) {
-          pc.addTrack(track, stream)
+        if (audioStream) {
+          for (const track of audioStream.getTracks()) {
+            pc.addTrack(track, audioStream)
+          }
         }
       } catch (e) {
         errorHander(e)
       }
     } else {
-      for (const track of audioStream.getTracks()) {
-        pc.addTrack(track, audioStream)
+      if (audioStream) {
+        for (const track of audioStream.getTracks()) {
+          pc.addTrack(track, audioStream)
+        }
       }
     }
   }
