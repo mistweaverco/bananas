@@ -17,15 +17,20 @@
   let isStreaming = false
   let sessionStarted = false
   let connectionStringIsValid: boolean | null = null
+  let connectToUserName = ''
   let copyButtonIsLoading = false
   let connectionString = useHostUrl()
 
-  const onConnectionStringChange = (): void => {
+  const onConnectionStringChange = async (): Promise<void> => {
     if ($connectionString === '') {
       connectionStringIsValid = null
       return
     }
     connectionStringIsValid = mayBeConnectionString(ConnectionType.PARTICIPANT, $connectionString)
+    if (connectionStringIsValid) {
+      const banansData = await getDataFromBananasUrl($connectionString)
+      connectToUserName = banansData.data.username
+    }
   }
 
   $: $connectionString, onConnectionStringChange()
@@ -39,7 +44,7 @@
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
     connectButton.addEventListener('click', async () => {
-      const data = getDataFromBananasUrl($connectionString)
+      const data = await getDataFromBananasUrl($connectionString)
       await webRTCComponent.Connect(data.rtcSessionDescription)
       isStreaming = true
       displayStreamActive = true
@@ -221,11 +226,7 @@
           <span class="icon">
             <i class="fas fa-link"></i>
           </span>
-          <span
-            >Connect {connectionStringIsValid
-              ? getDataFromBananasUrl($connectionString).data.username
-              : ''}
-          </span>
+          <span>Connect {connectionStringIsValid ? connectToUserName : ''} </span>
         </button>
       </div>
     </div>

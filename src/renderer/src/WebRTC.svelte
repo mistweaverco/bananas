@@ -141,7 +141,7 @@
     } catch (e) {
       errorHander(e)
     }
-    return getConnectionString(ConnectionType.PARTICIPANT, pc.localDescription, data)
+    return await getConnectionString(ConnectionType.PARTICIPANT, pc.localDescription, data)
   }
   export async function CreateHostUrl(data: { username: string }): Promise<string> {
     remoteMouseCursorPositionsChannel = pc.createDataChannel('remoteMouseCursorPositions')
@@ -150,7 +150,7 @@
     setupDataChannel(remoteCursorPingChannel)
     const desc = await pc.createOffer()
     await pc.setLocalDescription(desc)
-    return getConnectionString(ConnectionType.HOST, pc.localDescription, data)
+    return await getConnectionString(ConnectionType.HOST, pc.localDescription, data)
   }
   export function ToggleDisplayStream(): void {
     if (stream) {

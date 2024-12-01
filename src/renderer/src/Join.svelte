@@ -23,15 +23,20 @@
   let isStreaming = false
   let isConnected = false
   let connectionStringIsValid: boolean | null = null
+  let connectToUserName = ''
   let copyButtonIsLoading = false
   let connectionString = useParticipantUrl()
 
-  const onConnectionStringChange = (): void => {
+  const onConnectionStringChange = async (): Promise<void> => {
     if ($connectionString === '') {
       connectionStringIsValid = null
       return
     }
     connectionStringIsValid = mayBeConnectionString(ConnectionType.HOST, $connectionString)
+    if (connectionStringIsValid) {
+      const bananasData = await getDataFromBananasUrl($connectionString)
+      connectToUserName = bananasData.data.username
+    }
   }
 
   $: $connectionString, onConnectionStringChange()
@@ -41,7 +46,7 @@
     makeVideoDraggable(remoteScreen)
     connectButton.addEventListener('click', async () => {
       await webRTCComponent.Setup(remoteScreen)
-      const data = getDataFromBananasUrl($connectionString)
+      const data = await getDataFromBananasUrl($connectionString)
       await webRTCComponent.Connect(data.rtcSessionDescription)
       isConnected = true
       $isWatching = true
@@ -49,7 +54,7 @@
     })
     copyButton.addEventListener('click', async () => {
       copyButtonIsLoading = true
-      const remoteData = getDataFromBananasUrl($connectionString)
+      const remoteData = await getDataFromBananasUrl($connectionString)
       const data = await webRTCComponent.CreateParticipantUrl(remoteData.rtcSessionDescription, {
         username: settings.username
       })
@@ -179,11 +184,7 @@
               <span class="icon">
                 <i class="fas fa-link"></i>
               </span>
-              <span
-                >Connect {connectionStringIsValid
-                  ? getDataFromBananasUrl($connectionString).data.username
-                  : ''}
-              </span>
+              <span>Connect {connectionStringIsValid ? connectToUserName : ''} </span>
             </button>
           </div>
         </div>

@@ -18,10 +18,10 @@
   const isHosting = useIsHosting()
   useNavigationEnabled()
   useIsWatching()
-  window.onmessage = (evt: MessageEvent): void => {
+  window.onmessage = async (evt: MessageEvent): Promise<void> => {
     const { data } = evt
     if (data.type !== 'openBananasURL') return
-    const urlData = getDataFromBananasUrl(data.url)
+    const urlData = await getDataFromBananasUrl(data.url)
     switch (urlData.type) {
       case 'host':
         $activeView = 'join'

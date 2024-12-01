@@ -13,6 +13,34 @@ export const getUUIDv4 = (): string => {
   })
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const compressJson = async (data: any): Promise<string> => {
+  const stream = new Blob([JSON.stringify(data)], {
+    type: 'application/json'
+  }).stream()
+  const compressedStream = stream.pipeThrough(new CompressionStream('gzip'))
+  const compressedResponse = new Response(compressedStream)
+  const blob = await compressedResponse.blob()
+  const buffer = await blob.arrayBuffer()
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const decompressJson = async (data: string): Promise<any> => {
+  const buffer = new Uint8Array(
+    atob(data)
+      .split('')
+      .map((c) => c.charCodeAt(0))
+  )
+  const stream = new Blob([buffer], {
+    type: 'application/json'
+  }).stream()
+  const decompressedStream = stream.pipeThrough(new DecompressionStream('gzip'))
+  const res = new Response(decompressedStream)
+  const blob = await res.blob()
+  return JSON.parse(await blob.text())
+}
+
 export const mayBeConnectionString = (ct: ConnectionType, str: string): boolean => {
   try {
     const url = new URL(str)
@@ -21,32 +49,32 @@ export const mayBeConnectionString = (ct: ConnectionType, str: string): boolean 
     const token = url.searchParams.get('token')
     const username = url.searchParams.get('username')
     if (!token || !username) return false
-    JSON.parse(atob(token))
+    decompressJson(token)
     return true
   } catch (err) {
     return false
   }
 }
 
-export const getConnectionString = (
+export const getConnectionString = async (
   ct: ConnectionType,
   offer: RTCSessionDescriptionInit,
   data: {
     username: string
   }
-): string => {
+): Promise<string> => {
   const { username } = data
-  const token = encodeURIComponent(btoa(JSON.stringify(offer)))
+  const token = encodeURIComponent(await compressJson(offer))
   return `bananas://${ct}?username=${encodeURIComponent(username)}&token=${token}`
 }
 
-export const getDataFromBananasUrl = (
+export const getDataFromBananasUrl = async (
   url: string
-): {
+): Promise<{
   type: ConnectionType
   data: { username: string }
   rtcSessionDescription: RTCSessionDescriptionInit
-} => {
+}> => {
   const u = new URL(url)
   const token = u.searchParams.get('token')
   const username = u.searchParams.get('username')
@@ -55,7 +83,7 @@ export const getDataFromBananasUrl = (
     data: {
       username: username
     },
-    rtcSessionDescription: JSON.parse(atob(token))
+    rtcSessionDescription: await decompressJson(decodeURIComponent(token))
   }
 }
 
