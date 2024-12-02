@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import ColorPicker from 'svelte-awesome-color-picker'
+  import { externalLinkClickHandler } from './Utils'
 
   let colorPreviewIcon: HTMLElement
   let usernameValue: string = 'Banana Joe'
@@ -15,6 +16,16 @@
   $: colorValue, checkColor()
   $: usernameValue, checkUsername()
   $: iceServersValue, checkIceServers()
+
+  const GITHUB_REPO_URL = 'https://github.com/mistweaverco/bananas'
+
+  function reportABug(e: MouseEvent & { currentTarget: HTMLButtonElement }): void {
+    externalLinkClickHandler(e.currentTarget, `${GITHUB_REPO_URL}/issues/new`)
+  }
+
+  function seeTheCode(e: MouseEvent & { currentTarget: HTMLButtonElement }): void {
+    externalLinkClickHandler(e.currentTarget, GITHUB_REPO_URL)
+  }
 
   const checkIceServers = (): void => {
     const serversObjects = iceServersValue.split('\n')
@@ -149,6 +160,21 @@
       </div>
     </div>
   </form>
+
+  <hr />
+
+  <button class="button is-secondary" data-action="report-a-bug" on:click={reportABug}>
+    <span class="icon">
+      <i class="fa-solid fa-bug"></i>
+    </span>
+    <strong>Report a bug</strong>
+  </button>
+  <button class="button is-secondary" data-action="see-the-code" on:click={seeTheCode}>
+    <span class="icon">
+      <i class="fa-solid fa-code"></i>
+    </span>
+    <strong>See the code</strong>
+  </button>
 </div>
 
 <style>

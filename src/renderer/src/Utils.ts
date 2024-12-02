@@ -5,6 +5,14 @@ export const enum ConnectionType {
 
 export type RTCSessionDescriptionOptions = RTCSessionDescriptionInit
 
+export const externalLinkClickHandler = (root: HTMLButtonElement, url: string): void => {
+  root.classList.add('is-loading')
+  setTimeout(() => {
+    root.classList.remove('is-loading')
+  }, 3000)
+  window.open(url)
+}
+
 export const getUUIDv4 = (): string => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0

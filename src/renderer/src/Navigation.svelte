@@ -4,37 +4,13 @@
   const isHosting = useIsHosting()
   const isWatching = useIsWatching()
   const navigationEnabled = useNavigationEnabled()
-  const externalLinkClickHandler = (root: HTMLButtonElement, url: string): void => {
-    root.classList.add('is-loading')
-    setTimeout(() => {
-      root.classList.remove('is-loading')
-    }, 3000)
-    window.open(url)
-  }
 
   const handleTopButtonsClick = (evt: MouseEvent): void => {
     evt.preventDefault()
     const target = evt.target as HTMLButtonElement
     const root = target.closest('button')
-    switch (root.dataset.action) {
-      case 'join':
-        $activeView = 'join'
-        break
-      case 'host':
-        $activeView = 'host'
-        break
-      case 'settings':
-        $activeView = 'settings'
-        break
-      case 'report-a-bug':
-        externalLinkClickHandler(root, 'https://github.com/mistweaverco/bananas/issues/new')
-        break
-      case 'see-the-code':
-        externalLinkClickHandler(root, 'https://github.com/mistweaverco/bananas')
-        break
-      default:
-        break
-    }
+
+    $activeView = root.dataset.action
   }
 </script>
 
@@ -80,26 +56,6 @@
                 <i class="fa-solid fa-gear"></i>
               </span>
               <strong>Settings</strong>
-            </button>
-            <button
-              class="button is-secondary"
-              data-action="report-a-bug"
-              on:click={handleTopButtonsClick}
-            >
-              <span class="icon">
-                <i class="fa-solid fa-bug"></i>
-              </span>
-              <strong>Report a bug</strong>
-            </button>
-            <button
-              class="button is-secondary"
-              data-action="see-the-code"
-              on:click={handleTopButtonsClick}
-            >
-              <span class="icon">
-                <i class="fa-solid fa-code"></i>
-              </span>
-              <strong>See the code</strong>
             </button>
           </div>
         </div>
