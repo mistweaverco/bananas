@@ -1,39 +1,40 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { useNavigationEnabled, useIsHosting, useHostUrl } from './stores'
+  import { hostUrl, isHosting, navigationEnabled } from './stores.svelte'
   import { mayBeConnectionString, getDataFromBananasUrl, ConnectionType } from './Utils'
   import WebRTC from './WebRTC.svelte'
-
-  const navigationEnabled = useNavigationEnabled()
-  const isHosting = useIsHosting()
 
   let webRTCComponent: WebRTC
   let connectButton: HTMLButtonElement
   let copyButton: HTMLButtonElement
 
-  let cursorsActive = false
-  let displayStreamActive = false
-  let microphoneActive = true
-  let isStreaming = false
-  let sessionStarted = false
-  let connectionStringIsValid: boolean | null = null
-  let connectToUserName = ''
-  let copyButtonIsLoading = false
-  let connectionString = useHostUrl()
+  let cursorsActive = $state(false)
+  let displayStreamActive = $state(false)
+  let microphoneActive = $state(true)
+  let isStreaming = $state(false)
+  let sessionStarted = $state(false)
+  let connectionStringIsValid: boolean | null = $state(null)
+  let connectToUserName = $state('')
+  let copyButtonIsLoading = $state(false)
+  let connectionString = $derived(hostUrl.value)
 
   const onConnectionStringChange = async (): Promise<void> => {
-    if ($connectionString === '') {
+    if (connectionString === '') {
       connectionStringIsValid = null
       return
     }
-    connectionStringIsValid = mayBeConnectionString(ConnectionType.PARTICIPANT, $connectionString)
+
+    connectionStringIsValid = mayBeConnectionString(ConnectionType.PARTICIPANT, connectionString)
+
     if (connectionStringIsValid) {
-      const banansData = await getDataFromBananasUrl($connectionString)
+      const banansData = await getDataFromBananasUrl(connectionString)
       connectToUserName = banansData.data.username
     }
   }
 
-  $: $connectionString, onConnectionStringChange()
+  $effect(() => {
+    onConnectionStringChange()
+  })
 
   const toggleRemoteCursors = (): void => {
     cursorsActive = !cursorsActive
@@ -44,11 +45,12 @@
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
     connectButton.addEventListener('click', async () => {
-      const data = await getDataFromBananasUrl($connectionString)
+      const data = await getDataFromBananasUrl(connectionString)
       await webRTCComponent.Connect(data.rtcSessionDescription)
       isStreaming = true
       displayStreamActive = true
     })
+
     copyButton.addEventListener('click', async () => {
       copyButtonIsLoading = true
       const offer = await webRTCComponent.CreateHostUrl({
@@ -63,11 +65,11 @@
   const onStartSessionButtonClick = async (): Promise<void> => {
     await webRTCComponent.Setup()
     sessionStarted = true
-    $navigationEnabled = false
-    $isHosting = true
+    navigationEnabled.value = false
+    isHosting.value = true
   }
   const reset = (): void => {
-    $connectionString = ''
+    hostUrl.value = ''
     cursorsActive = false
     displayStreamActive = false
     microphoneActive = true
@@ -75,8 +77,8 @@
     sessionStarted = false
     connectionStringIsValid = null
     copyButtonIsLoading = false
-    $navigationEnabled = true
-    $isHosting = false
+    navigationEnabled.value = true
+    isHosting.value = false
   }
   const onDisconnectClick = async (): Promise<void> => {
     await webRTCComponent.Disconnect()
@@ -108,7 +110,7 @@
           <button
             title={displayStreamActive ? 'Streaming your display' : 'Not streaming your display'}
             class="button {displayStreamActive ? 'is-success' : 'is-danger'}"
-            on:click={onDisplayStreamToggle}
+            onclick={onDisplayStreamToggle}
           >
             <span class="icon">
               <i class="fa-solid fa-display"></i>
@@ -117,7 +119,7 @@
           <button
             title={microphoneActive ? 'Microphone active' : 'Microphone muted'}
             class="button {microphoneActive ? 'is-success' : 'is-danger'}"
-            on:click={onMicrophoneToggle}
+            onclick={onMicrophoneToggle}
           >
             <span class="icon">
               <i class="fas {microphoneActive ? 'fa-microphone' : 'fa-microphone-slash'}"></i>
@@ -128,7 +130,7 @@
             class="button {cursorsActive ? 'is-success' : 'is-danger'} {!displayStreamActive
               ? 'is-hidden'
               : ''}"
-            on:click={toggleRemoteCursors}
+            onclick={toggleRemoteCursors}
           >
             <span class="icon">
               <i class="fas fa-mouse-pointer"></i>
@@ -136,7 +138,7 @@
           </button>
         </div>
         <div class="cell has-text-right">
-          <button class="button is-danger" on:click={onDisconnectClick}>
+          <button class="button is-danger" onclick={onDisconnectClick}>
             <span class="icon">
               <i class="fas fa-unlink"></i>
             </span>
@@ -152,7 +154,7 @@
         <button
           class="button is-link {isStreaming ? 'is-hidden' : ''}"
           disabled={sessionStarted}
-          on:click={onStartSessionButtonClick}
+          onclick={onStartSessionButtonClick}
         >
           <span class="icon">
             <i class="fas fa-play"></i>
@@ -164,7 +166,7 @@
       <div class="cell">
         <button
           class="button is-danger {!sessionStarted || isStreaming ? 'is-hidden' : ''}"
-          on:click={onDisconnectClick}
+          onclick={onDisconnectClick}
         >
           <span class="icon">
             <i class="fas fa-unlink"></i>
@@ -191,7 +193,7 @@
     <div class="field has-addons {!sessionStarted || isStreaming ? 'is-hidden' : ''}">
       <div class="control has-icons-left has-icons-right">
         <input
-          bind:value={$connectionString}
+          bind:value={hostUrl.value}
           placeholder="participant connection string"
           class="input {connectionStringIsValid === null
             ? ''
