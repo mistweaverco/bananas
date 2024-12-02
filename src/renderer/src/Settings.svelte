@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import ColorPicker from 'svelte-awesome-color-picker'
-  import { externalLinkClickHandler } from './Utils'
+  import { checkIsUsernameValid, checkIsValidHexColor, externalLinkClickHandler } from './Utils'
 
   let colorPreviewIcon: HTMLElement
   let usernameValue: string = 'Banana Joe'
@@ -38,24 +38,17 @@
       }
     })
   }
-  const checkIsValidHexColor = (color: string): boolean => {
-    return /^#[0-9A-F]{6}$/i.test(color)
-  }
+
   function checkColor(): void {
-    if (checkIsValidHexColor(colorValue)) {
-      isColorValid = true
-      colorPreviewIcon?.style.setProperty('--color', colorValue)
-    } else {
-      isColorValid = false
-    }
+    isColorValid = checkIsValidHexColor(colorValue)
+
+    if (isColorValid) colorPreviewIcon?.style.setProperty('--color', colorValue)
   }
+
   function checkUsername(): void {
-    if (usernameValue.length > 0 && usernameValue.length < 32) {
-      isUsernameValid = true
-    } else {
-      isUsernameValid = false
-    }
+    isUsernameValid = checkIsUsernameValid(usernameValue)
   }
+
   async function onSubmit(evt: Event): Promise<void> {
     evt.preventDefault()
     if (isUsernameValid && isColorValid && isIceServersValid) {

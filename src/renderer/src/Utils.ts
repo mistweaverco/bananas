@@ -5,6 +5,14 @@ export const enum ConnectionType {
 
 export type RTCSessionDescriptionOptions = RTCSessionDescriptionInit
 
+export const checkIsValidHexColor = (color: string): boolean => {
+  return /^#[0-9A-F]{6}$/i.test(color)
+}
+
+export const checkIsUsernameValid = (username: string): boolean => {
+  return /^[a-zA-Z0-9_]{1,31}$/.test(username) // 1 to 31 inclusive
+}
+
 export const externalLinkClickHandler = (root: HTMLButtonElement, url: string): void => {
   root.classList.add('is-loading')
   setTimeout(() => {
