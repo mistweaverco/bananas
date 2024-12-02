@@ -53,6 +53,8 @@ async function createWindow(): Promise<void> {
   MAIN_WINDOW = new BrowserWindow({
     width: mainWindowState.width,
     height: mainWindowState.height,
+    minWidth: 400,
+    minHeight: 200,
     x: mainWindowState.x,
     y: mainWindowState.y,
     show: false,
