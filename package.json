@@ -41,8 +41,8 @@
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@mistweaverco/electron-notarize-async": "0.0.4",
     "@fortawesome/fontawesome-free": "6.6.0",
-    "@sveltejs/adapter-node": "5.2.9",
-    "@sveltejs/vite-plugin-svelte": "3.1.2",
+    "@sveltejs/adapter-node": "^5.2.9",
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "@types/node": "^20.14.8",
     "bulma": "1.0.2",
     "dotenv": "16.4.5",
@@ -55,11 +55,11 @@
     "kit-monorepo": "github:sveltejs/kit",
     "prettier": "^3.3.2",
     "prettier-plugin-svelte": "^3.2.5",
-    "svelte": "4.2.19",
+    "svelte": "^5.4.0",
     "svelte-awesome-color-picker": "3.1.4",
-    "svelte-check": "3.8.6",
+    "svelte-check": "^4.1.0",
     "tslib": "^2.6.3",
     "typescript": "^5.5.2",
-    "vite": "^5.3.1"
+    "vite": "^6.0.0"
   }
 }
