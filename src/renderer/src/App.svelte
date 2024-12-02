@@ -39,10 +39,8 @@
 
 {#if $activeView === 'join'}
   <Join />
-{/if}
-{#if $activeView === 'host'}
+{:else if $activeView === 'host'}
   <Host />
-{/if}
-{#if $activeView === 'settings'}
+{:else if $activeView === 'settings'}
   <Settings />
 {/if}
