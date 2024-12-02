@@ -81,13 +81,6 @@
               </span>
               <strong>Settings</strong>
             </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
             <button
               class="button is-secondary"
               data-action="report-a-bug"
