@@ -36,6 +36,7 @@ const BananasApi = {
   getSettings: async (): Promise<{
     username: string
     color: string
+    isMicrophoneEnabledOnConnect: boolean
     iceServers: IceServer[]
   }> => {
     return await ipcRenderer.invoke('getSettings')
@@ -43,6 +44,7 @@ const BananasApi = {
   updateSettings: async (settings: {
     username: string
     color: string
+    isMicrophoneEnabledOnConnect: boolean
     iceServers: IceServer[]
   }): Promise<void> => {
     ipcRenderer.invoke('updateSettings', settings)

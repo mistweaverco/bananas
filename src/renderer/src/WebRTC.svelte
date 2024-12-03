@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { RTCSessionDescriptionOptions } from './Utils'
-  import type { BananasRemoteCursorData } from './BananasTypes'
+  import type { BananasRemoteCursorData, SettingsData } from './BananasTypes'
   import { getConnectionString, ConnectionType } from './Utils'
   import { getRTCPeerConnectionConfig } from './Config'
 
@@ -16,6 +16,7 @@
   let audioStream: MediaStream | null = null
   let stream: MediaStream | null = null
   let audioElement: HTMLAudioElement | null = null
+  let userSettings: SettingsData | null = null
 
   const remoteMouseCursorPositionsChannelIsReady = (): boolean => {
     if (!remoteMouseCursorPositionsChannel) return false
@@ -69,8 +70,11 @@
     return enabled
   }
   export async function Setup(v: HTMLVideoElement = null): Promise<void> {
+    userSettings = await window.BananasApi.getSettings()
     remoteVideo = v
     audioElement = document.createElement('audio')
+    audioElement.controls = true
+    document.body.appendChild(audioElement)
     audioElement.autoplay = true
     if (pc) {
       pc.close()
@@ -89,7 +93,9 @@
       if (remoteVideo) {
         remoteVideo.srcObject = evt.streams[0]
       }
-      audioElement.srcObject = evt.streams[0]
+      if (audioStream) {
+        audioElement.srcObject = evt.streams[0]
+      }
     }
     pc.onicecandidate = function (e: RTCPeerConnectionIceEvent): void {
       const cand = e.candidate
@@ -121,7 +127,8 @@
         }
         if (audioStream) {
           for (const track of audioStream.getTracks()) {
-            pc.addTrack(track, audioStream)
+            track.enabled = userSettings.isMicrophoneEnabledOnConnect
+            pc.addTrack(track, stream)
           }
         }
       } catch (e) {
@@ -130,6 +137,7 @@
     } else {
       if (audioStream) {
         for (const track of audioStream.getTracks()) {
+          track.enabled = userSettings.isMicrophoneEnabledOnConnect
           pc.addTrack(track, audioStream)
         }
       }

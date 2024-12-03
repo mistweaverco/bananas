@@ -11,10 +11,12 @@
   let isIceServersValid = true
   let modalSuccessIsActive = false
   let modalFailureIsActive = false
+  let isMicrophoneEnabledOnConnect = true
 
   $: colorValue, checkColor()
   $: usernameValue, checkUsername()
   $: iceServersValue, checkIceServers()
+  $: isMicrophoneEnabledOnConnect
 
   const checkIceServers = (): void => {
     const serversObjects = iceServersValue.split('\n')
@@ -51,6 +53,7 @@
       await window.BananasApi.updateSettings({
         username: usernameValue,
         color: colorValue,
+        isMicrophoneEnabledOnConnect,
         iceServers: iceServersValue.split('\n').map((srv) => JSON.parse(srv))
       })
       modalSuccessIsActive = true
@@ -68,6 +71,7 @@
     const settings = await window.BananasApi.getSettings()
     usernameValue = settings.username
     colorValue = settings.color
+    isMicrophoneEnabledOnConnect = settings.isMicrophoneEnabledOnConnect
     iceServersValue = settings.iceServers.map((srv) => JSON.stringify(srv)).join('\n')
   })
 </script>
@@ -129,15 +133,34 @@
       </div>
     </div>
 
+    <h2>Media</h2>
+
+    <div class="field">
+      <div class="control">
+        <label class="checkbox" for="microphone_active_on_connect">
+          <input
+            bind:checked={isMicrophoneEnabledOnConnect}
+            class="checkbox"
+            type="checkbox"
+            id="microphone_active_on_connect"
+            placeholder="#fffff"
+          />
+          Is microphone active on connect
+        </label>
+      </div>
+    </div>
+
     <h2>Advanced</h2>
 
     <div class="field">
-      <label class="label" for="color">STUN/TURN Server Objects (separated by new lines)</label>
+      <label class="label" for="ice_servers"
+        >STUN/TURN Server Objects (separated by new lines)</label
+      >
       <div class="control has-icons-left has-icons-right">
         <textarea
           bind:value={iceServersValue}
           class="textarea {isIceServersValid ? 'is-success' : 'is-danger'}"
-          id="color"
+          id="ice_servers"
           placeholder="&lbrace; &quot;urls&quot;: &quot;stun:stun.l.google.com:19302&quot; &rbrace;"
         ></textarea>
       </div>

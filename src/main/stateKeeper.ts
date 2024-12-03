@@ -11,6 +11,7 @@ type IceServer = {
 export type SettingsData = {
   username: string
   color: string
+  isMicrophoneEnabledOnConnect: boolean
   iceServers: IceServer[]
 }
 
@@ -35,6 +36,7 @@ export const settingsKeeper = async (): Promise<Settings> => {
   const defaultSettings: SettingsData = {
     username: 'Banana Joe',
     color: '#ffffff',
+    isMicrophoneEnabledOnConnect: true,
     iceServers: [
       {
         urls: 'stun:stun.l.google.com:19302'

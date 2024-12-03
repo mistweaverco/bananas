@@ -13,7 +13,7 @@
 
   let cursorsActive = false
   let displayStreamActive = false
-  let microphoneActive = true
+  let microphoneActive = false
   let isStreaming = false
   let sessionStarted = false
   let connectionStringIsValid: boolean | null = null
@@ -43,6 +43,7 @@
 
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
+    microphoneActive = settings.isMicrophoneEnabledOnConnect
     connectButton.addEventListener('click', async () => {
       const data = await getDataFromBananasUrl($connectionString)
       await webRTCComponent.Connect(data.rtcSessionDescription)
