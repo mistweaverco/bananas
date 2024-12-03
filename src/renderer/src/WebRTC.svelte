@@ -8,14 +8,14 @@
     console.error(e)
   }
 
-  let remoteVideo: HTMLVideoElement | null = null
-  let pc: RTCPeerConnection | null = null
-  let remoteCursorPositionsEnabled = false
-  let remoteMouseCursorPositionsChannel: RTCDataChannel | null = null
-  let remoteCursorPingChannel: RTCDataChannel | null = null
-  let audioStream: MediaStream | null = null
-  let stream: MediaStream | null = null
-  let audioElement: HTMLAudioElement | null = null
+  let remoteVideo: HTMLVideoElement | null = $state(null)
+  let pc: RTCPeerConnection | null = $state(null)
+  let remoteCursorPositionsEnabled = $state(false)
+  let remoteMouseCursorPositionsChannel: RTCDataChannel | null = $state(null)
+  let remoteCursorPingChannel: RTCDataChannel | null = $state(null)
+  let audioStream: MediaStream | null = $state(null)
+  let stream: MediaStream | null = $state(null)
+  let audioElement: HTMLAudioElement | null = $state(null)
 
   const remoteMouseCursorPositionsChannelIsReady = (): boolean => {
     if (!remoteMouseCursorPositionsChannel) return false

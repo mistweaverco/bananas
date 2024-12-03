@@ -27,6 +27,7 @@ declare global {
         iceServers: IceServer[]
       }) => Promise<void>
       getSettings: () => Promise<{ username: string; color: string; iceServers: IceServer[] }>
+      getAppVersion: () => Promise<string>
     }
   }
 }

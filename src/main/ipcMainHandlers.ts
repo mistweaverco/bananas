@@ -1,5 +1,5 @@
 import type { SettingsData } from './stateKeeper'
-import { BrowserWindow, ipcMain, screen } from 'electron'
+import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import { createCursorsWindow } from './cursors'
 import { settingsKeeper } from './stateKeeper'
 
@@ -51,5 +51,8 @@ export const ipcMainHandlersInit = (): void => {
   ipcMain.handle('getSettings', async (): Promise<SettingsData> => {
     const settingsKeeperInstance = await settingsKeeper()
     return settingsKeeperInstance.get()
+  })
+  ipcMain.handle('getAppVersion', (): string => {
+    return app.getVersion()
   })
 }

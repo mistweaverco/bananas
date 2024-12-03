@@ -1,21 +1,24 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import ColorPicker from 'svelte-awesome-color-picker'
-  import { externalLinkClickHandler } from './Utils'
+  import {
+    checkIceServers,
+    checkIsUsernameValid,
+    checkIsValidHexColor,
+    externalLinkClickHandler
+  } from './Utils'
 
   let colorPreviewIcon: HTMLElement
-  let usernameValue: string = 'Banana Joe'
-  let colorValue: string = '#ffffff'
-  let iceServersValue: string = '{ "urls": "stun:stun.l.google.com:19302" }'
-  let isUsernameValid = false
-  let isColorValid = false
-  let isIceServersValid = true
-  let modalSuccessIsActive = false
-  let modalFailureIsActive = false
 
-  $: colorValue, checkColor()
-  $: usernameValue, checkUsername()
-  $: iceServersValue, checkIceServers()
+  let usernameValue: string = $state('Banana Joe')
+  let colorValue: string = $state('#ffffff')
+  let iceServersValue: string = $state('{ "urls": "stun:stun.l.google.com:19302" }')
+  let modalSuccessIsActive = $state(false)
+  let modalFailureIsActive = $state(false)
+
+  let isUsernameValid = $derived(checkIsUsernameValid(usernameValue))
+  let isColorValid = $derived(checkIsValidHexColor(colorValue))
+  let isIceServersValid = $derived(checkIceServers(iceServersValue))
 
   const GITHUB_REPO_URL = 'https://github.com/mistweaverco/bananas'
 
@@ -27,37 +30,13 @@
     externalLinkClickHandler(e.currentTarget, GITHUB_REPO_URL)
   }
 
-  const checkIceServers = (): void => {
-    const serversObjects = iceServersValue.split('\n')
-    isIceServersValid = serversObjects.every((serverObject) => {
-      try {
-        const srv = JSON.parse(serverObject)
-        return srv.urls && srv.urls.length > 0
-      } catch (e) {
-        return false
-      }
-    })
-  }
-  const checkIsValidHexColor = (color: string): boolean => {
-    return /^#[0-9A-F]{6}$/i.test(color)
-  }
-  function checkColor(): void {
-    if (checkIsValidHexColor(colorValue)) {
-      isColorValid = true
-      colorPreviewIcon?.style.setProperty('--color', colorValue)
-    } else {
-      isColorValid = false
-    }
-  }
-  function checkUsername(): void {
-    if (usernameValue.length > 0 && usernameValue.length < 32) {
-      isUsernameValid = true
-    } else {
-      isUsernameValid = false
-    }
-  }
+  $effect(() => {
+    if (isColorValid) colorPreviewIcon?.style.setProperty('--color', colorValue)
+  })
+
   async function onSubmit(evt: Event): Promise<void> {
     evt.preventDefault()
+
     if (isUsernameValid && isColorValid && isIceServersValid) {
       await window.BananasApi.updateSettings({
         username: usernameValue,
@@ -75,11 +54,18 @@
       }, 2000)
     }
   }
+
+  let version = $state('')
+
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
     usernameValue = settings.username
     colorValue = settings.color
     iceServersValue = settings.iceServers.map((srv) => JSON.stringify(srv)).join('\n')
+
+    window.BananasApi.getAppVersion().then((_version) => {
+      version = _version
+    })
   })
 </script>
 
@@ -99,6 +85,9 @@
     <div class="box">
       <h1 class="title has-text-danger">Failure</h1>
       <p>Settings could not be saved.</p>
+      {#if !isUsernameValid}<p>Your username is invalid</p>{/if}
+      {#if !isColorValid}<p>Your color is invalid</p>{/if}
+      {#if !isIceServersValid}<p>Your servers are invalid</p>{/if}
     </div>
   </div>
 </div>
@@ -106,7 +95,7 @@
 <div class="container p-5 content">
   <h1 class="title">Settings</h1>
   <h2>Basic</h2>
-  <form class="form" on:submit={onSubmit}>
+  <form class="form" onsubmit={onSubmit}>
     <div class="field">
       <label class="label" for="username">Username</label>
       <div class="control has-icons-left has-icons-right">
@@ -150,7 +139,7 @@
           class="textarea {isIceServersValid ? 'is-success' : 'is-danger'}"
           id="color"
           placeholder="&lbrace; &quot;urls&quot;: &quot;stun:stun.l.google.com:19302&quot; &rbrace;"
-        />
+        ></textarea>
       </div>
     </div>
 
@@ -163,18 +152,22 @@
 
   <hr />
 
-  <button class="button is-secondary" data-action="report-a-bug" on:click={reportABug}>
+  <button class="button is-secondary" data-action="report-a-bug" onclick={reportABug}>
     <span class="icon">
       <i class="fa-solid fa-bug"></i>
     </span>
     <strong>Report a bug</strong>
   </button>
-  <button class="button is-secondary" data-action="see-the-code" on:click={seeTheCode}>
+  <button class="button is-secondary" data-action="see-the-code" onclick={seeTheCode}>
     <span class="icon">
       <i class="fa-solid fa-code"></i>
     </span>
     <strong>See the code</strong>
   </button>
+
+  <hr />
+
+  <h3>v{version}</h3>
 </div>
 
 <style>

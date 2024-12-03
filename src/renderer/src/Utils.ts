@@ -5,6 +5,29 @@ export const enum ConnectionType {
 
 export type RTCSessionDescriptionOptions = RTCSessionDescriptionInit
 
+export const checkIceServers = (iceServers: string): boolean => {
+  const serversObjects = iceServers.split('\n')
+
+  return serversObjects.every((serverObject) => {
+    try {
+      const srv = JSON.parse(serverObject)
+      return srv.urls && srv.urls.length > 0
+    } catch (e) {
+      return false
+    }
+  })
+}
+
+export const checkIsValidHexColor = (color: string): boolean => {
+  return /^#[0-9A-F]{6}$|^#[0-9A-F]{3}$/i.test(color)
+}
+
+export const checkIsUsernameValid = (username: string): boolean => {
+  // 1-31 characters inc.
+  // cannot start with a space
+  return /^[a-zA-Z0-9_][a-zA-Z0-9_\s]{0,30}$/.test(username)
+}
+
 export const externalLinkClickHandler = (root: HTMLButtonElement, url: string): void => {
   root.classList.add('is-loading')
   setTimeout(() => {

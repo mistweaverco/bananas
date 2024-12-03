@@ -3,33 +3,21 @@
   import Join from './Join.svelte'
   import Host from './Host.svelte'
   import Settings from './Settings.svelte'
-  import {
-    useActiveView,
-    useNavigationEnabled,
-    useIsHosting,
-    useIsWatching,
-    useParticipantUrl,
-    useHostUrl
-  } from './stores'
+  import { activeView, participantUrl, hostUrl, isHosting } from './stores.svelte'
   import { getDataFromBananasUrl } from './Utils'
-  const activeView = useActiveView()
-  const participantUrl = useParticipantUrl()
-  const hostUrl = useHostUrl()
-  const isHosting = useIsHosting()
-  useNavigationEnabled()
-  useIsWatching()
+
   window.onmessage = async (evt: MessageEvent): Promise<void> => {
     const { data } = evt
     if (data.type !== 'openBananasURL') return
     const urlData = await getDataFromBananasUrl(data.url)
     switch (urlData.type) {
       case 'host':
-        $activeView = 'join'
-        $participantUrl = data.url
+        activeView.value = 'join'
+        participantUrl.value = data.url
         break
       case 'participant':
-        if ($activeView !== 'host' || !$isHosting) return
-        $hostUrl = data.url
+        if (activeView.value !== 'host' || !isHosting.value) return
+        hostUrl.value = data.url
         break
     }
   }
@@ -37,10 +25,10 @@
 
 <Navigation />
 
-{#if $activeView === 'join'}
+{#if activeView.value === 'join'}
   <Join />
-{:else if $activeView === 'host'}
+{:else if activeView.value === 'host'}
   <Host />
-{:else if $activeView === 'settings'}
+{:else if activeView.value === 'settings'}
   <Settings />
 {/if}
