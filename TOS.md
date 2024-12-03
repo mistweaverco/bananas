@@ -19,7 +19,7 @@ and your continued use of the App after any such modifications indicates your ac
 
 ### 2. License
 
-See [LICENSE.md](LICENSE.md) for the license under which the App is provided.
+See [LICENSE](LICENSE) for the license under which the App is provided.
 
 ### 4. User Conduct
 
