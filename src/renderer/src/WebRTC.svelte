@@ -73,6 +73,8 @@
     userSettings = await window.BananasApi.getSettings()
     remoteVideo = v
     audioElement = document.createElement('audio')
+    audioElement.controls = true
+    document.body.appendChild(audioElement)
     audioElement.autoplay = true
     if (pc) {
       pc.close()
@@ -91,7 +93,9 @@
       if (remoteVideo) {
         remoteVideo.srcObject = evt.streams[0]
       }
-      audioElement.srcObject = evt.streams[0]
+      if (audioStream) {
+        audioElement.srcObject = evt.streams[0]
+      }
     }
     pc.onicecandidate = function (e: RTCPeerConnectionIceEvent): void {
       const cand = e.candidate
@@ -124,7 +128,7 @@
         if (audioStream) {
           for (const track of audioStream.getTracks()) {
             track.enabled = userSettings.isMicrophoneEnabledOnConnect
-            pc.addTrack(track, audioStream)
+            pc.addTrack(track, stream)
           }
         }
       } catch (e) {
@@ -175,7 +179,6 @@
     if (audioStream) {
       for (const track of audioStream.getAudioTracks()) {
         track.enabled = !track.enabled
-        console.log('track.enabled', track.enabled)
       }
     }
   }
