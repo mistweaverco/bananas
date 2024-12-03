@@ -19,7 +19,7 @@
   let remoteScreen: HTMLVideoElement
   let UUID = getUUIDv4()
   let zoomFactor = 1
-  let microphoneActive = true
+  let microphoneActive = false
   let isStreaming = false
   let isConnected = false
   let connectionStringIsValid: boolean | null = null
@@ -43,6 +43,7 @@
 
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
+    microphoneActive = settings.isMicrophoneEnabledOnConnect
     makeVideoDraggable(remoteScreen)
     connectButton.addEventListener('click', async () => {
       await webRTCComponent.Setup(remoteScreen)
