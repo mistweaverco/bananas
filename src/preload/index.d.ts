@@ -15,6 +15,7 @@ declare global {
       }) => Promise<void>
       updateSettings: (settings: { username: string; color: string }) => Promise<void>
       getSettings: () => Promise<{ username: string; color: string }>
+      getAppVersion: () => Promise<string>
     }
   }
 }

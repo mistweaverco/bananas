@@ -3,6 +3,7 @@
   import Join from './Join.svelte'
   import Host from './Host.svelte'
   import Settings from './Settings.svelte'
+  import About from './About.svelte'
   import {
     useActiveView,
     useNavigationEnabled,
@@ -43,4 +44,6 @@
   <Host />
 {:else if $activeView === 'settings'}
   <Settings />
+{:else if $activeView === 'about'}
+  <About />
 {/if}

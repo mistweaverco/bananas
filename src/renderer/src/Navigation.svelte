@@ -57,6 +57,19 @@
               </span>
               <strong>Settings</strong>
             </button>
+            <button
+              class="button is-secondary {$activeView === 'about'
+                ? 'is-active is-primary'
+                : 'is-secondary'}"
+              data-action="about"
+              on:click={handleTopButtonsClick}
+              disabled={!$navigationEnabled}
+            >
+              <span class="icon">
+                <i class="fa-solid fa-question"></i>
+              </span>
+              <strong>About</strong>
+            </button>
           </div>
         </div>
       </div>

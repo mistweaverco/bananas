@@ -9,13 +9,13 @@ help you figure out where you can best be helpful.
 ## Table of Contents
 
 0. [Types of contributions we're looking for](#types-of-contributions-were-looking-for)
-0. [Ground rules & expectations](#ground-rules--expectations)
-0. [How to contribute](#how-to-contribute)
-0. [Style guide](#style-guide)
-  1. [Documentation](#documentation)
-  2. [Code](#code)
-0. [Setting up your environment](#setting-up-your-environment)
-0. [Community](#community)
+1. [Ground rules & expectations](#ground-rules--expectations)
+2. [How to contribute](#how-to-contribute)
+3. [Style guide](#style-guide)
+4. [Documentation](#documentation)
+5. [Code](#code)
+6. [Setting up your environment](#setting-up-your-environment)
+7. [Community](#community)
 
 ## Types of contributions we're looking for
 

@@ -27,7 +27,7 @@ without the need for an account or any server infrastructure
 Grab the latest release from the
 [GitHub releases page](https://github.com/mistweaverco/bananas/releases/latest).
 
-Or if you are on Mac you can install it via homebrew with 
+Or if you are on Mac you can install it via homebrew with
 
 ```shell
 brew install --cask bananas
