@@ -55,11 +55,17 @@
     }
   }
 
+  let version = $state('')
+
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
     usernameValue = settings.username
     colorValue = settings.color
     iceServersValue = settings.iceServers.map((srv) => JSON.stringify(srv)).join('\n')
+
+    window.BananasApi.getAppVersion().then((_version) => {
+      version = _version
+    })
   })
 </script>
 
@@ -158,6 +164,10 @@
     </span>
     <strong>See the code</strong>
   </button>
+
+  <hr />
+
+  <h3>v{version}</h3>
 </div>
 
 <style>
