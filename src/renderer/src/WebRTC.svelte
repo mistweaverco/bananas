@@ -74,7 +74,6 @@
     remoteVideo = v
     audioElement = document.createElement('audio')
     audioElement.controls = true
-    document.body.appendChild(audioElement)
     audioElement.autoplay = true
     if (pc) {
       pc.close()
