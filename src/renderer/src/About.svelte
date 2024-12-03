@@ -10,10 +10,10 @@
 
   function openExternalURL(e: MouseEvent & { currentTarget: HTMLButtonElement }): void {
     const url = e.currentTarget.dataset.url
-    if (!url) {
+    if (!url) 
       return
-    }
-    externalLinkClickHandler(e.currentTarget, `${GITHUB_REPO_URL}/issues/new`)
+    
+    externalLinkClickHandler(e.currentTarget, url)
   }
 </script>
 
