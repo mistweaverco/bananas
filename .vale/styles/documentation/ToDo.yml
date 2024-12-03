@@ -1,0 +1,11 @@
+---
+extends: substitution
+message: "Use '%s' instead of '%s'."
+link: https://content-guide.18f.gov/specific-words-and-phrases/
+level: suggestion
+# 'to do' (noun) and 'to-do' (adjective). For example, your to dos or your
+# to-do list.
+pos: 'to/TO do/VB'
+ignorecase: true
+swap:
+  to do: to-do

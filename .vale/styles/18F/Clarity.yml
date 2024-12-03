@@ -1,0 +1,35 @@
+---
+extends: substitution
+message: '%s'
+link: https://content-guide.18f.gov/plain-language/#words-to-avoid
+level: warning
+ignorecase: true
+swap:
+  (?:commit|pledge): >
+    Be more specific — we’re either doing something or we’re not.
+  advancing: Avoid using 'advancing.'
+  agenda: Avoid using 'agenda' (unless you’re talking about a meeting).
+  deploy: >
+    Avoid using 'deploy', unless you’re talking about the military or
+    software.
+  disincentivize: Avoid using 'disincentivize.'
+  empower: Avoid using 'empower.'
+  focusing: Avoid using 'focusing.'
+  foster: Avoid using 'foster' (unless it’s children).
+  impact(?:ful)?: Avoid using impact or impactful.
+  incentivize: Avoid using 'incentivize.'
+  innovative: Use words that describe the positive outcome of the innovation.
+  key: Avoid using 'key' (unless it unlocks something).
+  leverage: >
+    Avoid using 'leverage' (unless you're using it in the financial sense).
+  progress: What are you actually doing?
+  promote: Avoid using 'promote' (unless you’re talking about an ad campaign).
+  streamline: Avoid using 'streamline.'
+  strengthening: >
+    Avoid using 'strengthening' (unless you’re referring to bridges or other
+    structures).
+  tackling: >
+    Avoid using 'tackling' (unless you’re referring to football or another
+    contact sport).
+  touchpoint: Mention specific system components.
+  transforming: What are you actually doing to change it?

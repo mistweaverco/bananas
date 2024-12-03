@@ -1,0 +1,18 @@
+---
+extends: substitution
+message: "Prefer %s over '%s'."
+level: warning
+ignorecase: false
+swap:
+  'e(?:-| )mail': email
+  (?:illegals|illegal aliens): "'undocumented immigrants'"
+  back-end: "'back end'"
+  citizen: "'people' or 'The public'"
+  combating: "'working against' or 'fighting'"
+  countering: "'answering' or 'responding'"
+  dialogue: "'speaking(ing)'"
+  dropdown: "'drop-down' or 'drop down'"
+  execute: "'run' or 'do'"
+  open-source: "'open source'"
+  simple: "'straightforward', 'uncomplicated', or 'clear'"
+  user testing: "'usability testing'"

@@ -1,0 +1,8 @@
+---
+message: Craft sentences at 25 words or fewer, whenever possible.
+link: 'https://content-guide.18f.gov/be-concise/#keep-sentences-short-and-sweet'
+extends: occurrence
+scope: sentence
+level: warning
+max: 25
+token: '\b(\w+)\b'

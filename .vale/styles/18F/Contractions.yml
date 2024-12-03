@@ -1,0 +1,41 @@
+---
+extends: substitution
+message: 'Use "%s" instead of "%s".'
+link: https://content-guide.18f.gov/voice-and-tone/#use-contractions
+level: error
+ignorecase: true
+swap:
+  are not: aren't
+  cannot: can't
+  could not: couldn't
+  did not: didn't
+  do not: don't
+  does not: doesn't
+  has not: hasn't
+  have not: haven't
+  how is: how's
+  how will: how'll
+  is not: isn't
+  it is: it's
+  it will: it'll
+  should not: shouldn't
+  that is: that's
+  that will: that'll
+  they are: they're
+  they will: they'll
+  was not: wasn't
+  we are: we're
+  we have: we've
+  we will: we'll
+  were not: weren't
+  what is: what's
+  what will: what'll
+  when is: when's
+  when will: when'll
+  where is: where's
+  where will: where'll
+  who is: who's
+  who will: who'll
+  why is: why's
+  why will: why'll
+  will not: won't
