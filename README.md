@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/github/downloads/mistweaverco/bananas/total.svg?style=for-the-badge)](https://getbananas.net/)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/mistweaverco/bananas?style=for-the-badge)](https://github.com/mistweaverco/bananas/releases/latest)
 
-[Install](#install) • [Website](https://getbananas.net/) • [Tutorial](https://getbananas.net/tutorial) • [Privacy Policy](./PRIVACY.md) • [Terms of Service](./TOS.md) • [Code of Conduct](./CODE_OF_CONDUCT.md)
+[Install](#install) • [Website](https://getbananas.net/) • [Tutorial](https://getbananas.net/tutorial)
 
 <p></p>
 
@@ -26,3 +26,9 @@ without the need for an account or any server infrastructure
 
 Grab the latest release from the
 [GitHub releases page](https://github.com/mistweaverco/bananas/releases/latest).
+
+Or if you are on Mac you can install it via homebrew with 
+
+```shell
+brew install --cask bananas
+```
