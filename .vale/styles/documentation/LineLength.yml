@@ -1,0 +1,22 @@
+---
+message: A line should be at most 80 characters long.
+link: https://tengolang.com/
+extends: script
+scope: raw
+level: warning
+script: |
+  text := import("text")
+  matches := []
+  // Remove all instances of code blocks since we don't want to count
+  // inter-block newlines as a new paragraph.
+  document := text.re_replace("(?s) *(\n```.*?```\n)", scope, "")
+  for line in text.split(document, "\n") {
+    // Skip links
+    if text.re_match("\\[(.*?)\\]: ", line) {
+      continue
+    }
+    if len(line) > 80 {
+      start := text.index(scope, line)
+      matches = append(matches, {begin: start, end: start + len(line)})
+    }
+  }

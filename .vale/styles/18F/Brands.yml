@@ -1,0 +1,22 @@
+---
+extends: substitution
+message: "Use '%s' instead of '%s'."
+link: https://content-guide.18f.gov/trademarks-and-brands/
+level: warning
+ignorecase: true
+swap:
+  Band-Aid: bandage
+  Bubble Wrap: packaging bubbles
+  Chapstick: lip balm
+  Crayola: crayons
+  Dumpster: waste container
+  Hi-Liter: highlighting marker
+  iPod: MP3 player
+  Kleenex: tissue
+  Plexiglas: plastic glass
+  Post-it note: adhesive note
+  Q-Tips: cotton swabs
+  Scotch tape: transparent tape
+  Styrofoam: plastic foam
+  Taser: stun gun
+  Xerox: photocopy

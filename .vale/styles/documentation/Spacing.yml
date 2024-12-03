@@ -1,0 +1,9 @@
+---
+extends: existence
+message: "'%s' should have one space."
+link: https://content-guide.18f.gov/punctuation/#spaces
+level: error
+nonword: true
+tokens:
+  - '[.?!] {2,}[A-Z]'
+  - '[.?!][A-Z]'

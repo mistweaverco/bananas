@@ -1,0 +1,14 @@
+---
+extends: substitution
+message: "Use %s instead of '%s'."
+link: https://content-guide.18f.gov/specific-words-and-phrases/
+level: error
+# 'drop-down' when used as an adjective. For example, drop-down menu.
+# 'drop down' when used as a noun. For example, an option from the drop down.
+# Never dropdown.
+pos: 'drop/\w+ down/RP|dropdown/\w+|drop-down/NN'
+ignorecase: true
+swap:
+  drop down: "'drop-down'"
+  drop-down: "'drop down'"
+  dropdown: "'drop-down' or 'drop down'"

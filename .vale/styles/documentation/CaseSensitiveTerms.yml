@@ -1,0 +1,10 @@
+---
+extends: substitution
+message: "Prefer %s over '%s'."
+level: warning
+ignorecase: false
+swap:
+  devops: "'DevOps'"
+  github: "'GitHub'"
+  javascript: "'JavaScript'"
+  readme: "'README'"

@@ -1,0 +1,64 @@
+---
+extends: conditional
+message: "'%s' should be parenthetically defined."
+link: https://content-guide.18f.gov/abbreviations-and-acronyms/
+level: warning
+first: '\b([A-Z]{3,5})\b'
+second: '(?:\b[A-Z][a-z]+['']? )+\(([A-Z]{3,5})\)'
+exceptions:
+  - ABC
+  - ADD
+  - ADHD
+  - AIDS
+  - APA
+  - API
+  - CBS
+  - CIA
+  - CSI
+  - CSS
+  - CST
+  - ESPN
+  - EST
+  - FAQ
+  - FBI
+  - FBI
+  - FIXME
+  - GNU
+  - GOV
+  - HIV
+  - HR
+  - HTML
+  - HTTP
+  - HTTPS
+  - JSON
+  - LAN
+  - MIT
+  - MLA
+  - MLB
+  - MTV
+  - NAACP
+  - NAACP
+  - NASA
+  - NASA
+  - NATO
+  - NBA
+  - NBC
+  - NCAA
+  - NCAAB
+  - NCAAF
+  - NFL
+  - NHL
+  - NOTE
+  - PDF
+  - PGA
+  - PPV
+  - PST
+  - SGML
+  - SSN
+  - TNT
+  - TODO
+  - URL
+  - USA
+  - USSR
+  - XML
+  - XXX

@@ -1,0 +1,14 @@
+---
+extends: substitution
+message: "Prefer %s over '%s'."
+level: warning
+ignorecase: true
+swap:
+  'e(?:-| )mail': email
+  back-end: "'back end'"
+  combating: "'working against' or 'fighting'"
+  countering: "'answering' or 'responding'"
+  dropdown: "'drop-down' or 'drop down'"
+  open-source: "'open source'"
+  simple: "'straightforward', 'uncomplicated', or 'clear'"
+  user testing: "'usability testing'"
