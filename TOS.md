@@ -73,4 +73,3 @@ the Terms indicates your acceptance of the modified terms.
 If you have any questions or concerns about these Terms,
 please contact us via filing an issue on the
 [GitHub repository](https://github.com/mistweaverco/bananas/issues/new).
-
