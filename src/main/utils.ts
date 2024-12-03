@@ -13,3 +13,16 @@ export const isInProductionMode = (): boolean => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) return false
   return true
 }
+
+export const debounce = <T extends (...args: unknown[]) => void>(
+  func: T,
+  wait: number
+): ((...args: Parameters<T>) => void) => {
+  let timeout: NodeJS.Timeout
+  return (...args: Parameters<T>): void => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func(...args)
+    }, wait)
+  }
+}

@@ -1,5 +1,6 @@
 import { screen } from 'electron'
 import settings from 'electron-settings'
+import { debounce } from './utils'
 
 type IceServer = {
   urls: string
@@ -79,7 +80,6 @@ export const windowStateKeeper = async (windowName: string): Promise<WindowState
   }
 
   const saveState = async (): Promise<void> => {
-    // bug: lots of save state events are called. they should be debounced
     const bounds = window.getBounds()
     windowState = {
       ...bounds,
@@ -90,9 +90,9 @@ export const windowStateKeeper = async (windowName: string): Promise<WindowState
 
   const track = async (win: Electron.BrowserWindow): Promise<void> => {
     window = win
-    win.on('move', saveState)
-    win.on('resize', saveState)
-    win.on('unmaximize', saveState)
+    win.on('move', debounce(saveState, 400))
+    win.on('resize', debounce(saveState, 400))
+    win.on('unmaximize', debounce(saveState, 400))
   }
 
   windowState = await setBounds()
