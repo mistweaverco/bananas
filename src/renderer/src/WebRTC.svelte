@@ -4,6 +4,8 @@
   import { getConnectionString, ConnectionType } from './Utils'
   import { getRTCPeerConnectionConfig } from './Config'
 
+  export let connectionState: string = 'disconnected'
+
   const errorHander = (e: ErrorEvent): void => {
     console.error(e)
   }
@@ -111,7 +113,7 @@
       }
     }
     pc.oniceconnectionstatechange = function (): void {
-      console.log('iceconnectionstatechange')
+      connectionState = pc.iceConnectionState
     }
     try {
       audioStream = await navigator.mediaDevices.getUserMedia({
