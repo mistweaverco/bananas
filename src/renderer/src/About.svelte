@@ -10,9 +10,8 @@
 
   function openExternalURL(e: MouseEvent & { currentTarget: HTMLButtonElement }): void {
     const url = e.currentTarget.dataset.url
-    if (!url) 
-      return
-    
+    if (!url) return
+
     externalLinkClickHandler(e.currentTarget, url)
   }
 </script>

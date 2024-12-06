@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { useNavigationEnabled, useIsHosting, useHostUrl } from './stores'
   import { mayBeConnectionString, getDataFromBananasUrl, ConnectionType } from './Utils'
+  import AudioVisualizer from './AudioVisualizer.svelte'
   import WebRTC from './WebRTC.svelte'
 
   const navigationEnabled = useNavigationEnabled()
@@ -20,6 +21,8 @@
   let connectToUserName = ''
   let copyButtonIsLoading = false
   let connectionString = useHostUrl()
+  let hasAudioInput = false
+  let visualizerIsActive: boolean = true
 
   const onConnectionStringChange = async (): Promise<void> => {
     if ($connectionString === '') {
@@ -66,6 +69,7 @@
     sessionStarted = true
     $navigationEnabled = false
     $isHosting = true
+    hasAudioInput = webRTCComponent.HasAudioInput()
   }
   const reset = (): void => {
     $connectionString = ''
@@ -115,15 +119,26 @@
               <i class="fa-solid fa-display"></i>
             </span>
           </button>
-          <button
-            title={microphoneActive ? 'Microphone active' : 'Microphone muted'}
-            class="button {microphoneActive ? 'is-success' : 'is-danger'}"
-            on:click={onMicrophoneToggle}
-          >
-            <span class="icon">
-              <i class="fas {microphoneActive ? 'fa-microphone' : 'fa-microphone-slash'}"></i>
-            </span>
-          </button>
+          {#if hasAudioInput}
+            <button
+              title={microphoneActive ? 'Microphone active' : 'Microphone muted'}
+              class="button {microphoneActive ? 'is-success' : 'is-danger'}"
+              on:click={onMicrophoneToggle}
+            >
+              <span class="icon">
+                {#if microphoneActive}
+                  <AudioVisualizer
+                    className="icon {!visualizerIsActive ? 'is-hidden' : ''}"
+                    bind:visualizerIsActive
+                    stream={webRTCComponent.GetAudioStream()}
+                  />
+                  <i class="fas fa-microphone {visualizerIsActive ? 'is-hidden' : ''}"></i>
+                {:else}
+                  <i class="fas fa-microphone-slash"></i>
+                {/if}
+              </span>
+            </button>
+          {/if}
           <button
             title={cursorsActive ? 'Remote cursors enabled' : 'Remote cursors disabled'}
             class="button {cursorsActive ? 'is-success' : 'is-danger'} {!displayStreamActive
