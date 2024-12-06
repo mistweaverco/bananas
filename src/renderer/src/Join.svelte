@@ -44,14 +44,36 @@
   }
 
   const onConnectionStateChange = (): void => {
-    if (connectionState === 'connected') {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Host connected',
-        showConfirmButton: false,
-        timer: 1500
-      })
+    switch (connectionState) {
+      case 'connected':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Connection established',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      case 'failed':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Connection failed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      case 'closed':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'Connection closed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      default:
+        break
     }
   }
 
