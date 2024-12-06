@@ -19,6 +19,13 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "PLATFORM=linux" >> $GITHUB_ENV
+      - name: Install OS packages
+        run: |
+          sudo apt-get install -y flatpak flatpak-builder && \
+          flatpak remote-add \
+            --user \
+            --if-not-exists \
+            flathub https://flathub.org/repo/flathub.flatpakrepo
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
       - name: Install dependencies
