@@ -11,4 +11,4 @@ update_package_json_version() {
 
 update_package_json_version
 
-npm run "build:$PLATFORM"
+bun run "build:$PLATFORM"

@@ -26,12 +26,10 @@ jobs:
             --user \
             --if-not-exists \
             flathub https://flathub.org/repo/flathub.flatpakrepo
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install node dependencies
-        run: npm ci
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
       - name: Build Linux
         run: ./scripts/build.sh
       - name: Linux Release
@@ -52,12 +50,10 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "PLATFORM=windows" >> $GITHUB_ENV
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install node dependencies
-        run: npm ci
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
       - name: Build Windows
         shell: bash
         run: ./scripts/build.sh
@@ -81,12 +77,10 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "PLATFORM=macos" >> $GITHUB_ENV
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install node dependencies
-        run: npm ci
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
       - name: Build MacOS
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
