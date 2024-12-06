@@ -63,6 +63,12 @@
     }
     remoteMouseCursorPositionsChannel.send(JSON.stringify(cursorData))
   }
+  export function HasAudioInput(): boolean {
+    return audioStream !== null
+  }
+  export function GetAudioStream(): MediaStream | null {
+    return audioStream
+  }
   export function ToggleRemoteCursors(enabled: boolean): boolean {
     if (!remoteMouseCursorPositionsChannel) return false
     if (remoteMouseCursorPositionsChannel.readyState !== 'open') return false

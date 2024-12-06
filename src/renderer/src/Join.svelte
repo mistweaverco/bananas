@@ -9,6 +9,7 @@
   } from './Utils'
   import { useNavigationEnabled, useIsWatching, useParticipantUrl } from './stores'
   import WebRTC from './WebRTC.svelte'
+  import AudioVisualizer from './AudioVisualizer.svelte'
 
   const navigationEnabled = useNavigationEnabled()
   const isWatching = useIsWatching()
@@ -26,6 +27,7 @@
   let connectToUserName = ''
   let copyButtonIsLoading = false
   let connectionString = useParticipantUrl()
+  let visualizerIsActive: boolean = true
 
   const onConnectionStringChange = async (): Promise<void> => {
     if ($connectionString === '') {
@@ -129,7 +131,16 @@
             on:click={onMicrophoneToggle}
           >
             <span class="icon">
-              <i class="fas {microphoneActive ? 'fa-microphone' : 'fa-microphone-slash'}"></i>
+              {#if microphoneActive}
+                <AudioVisualizer
+                  className="icon {!visualizerIsActive ? 'is-hidden' : ''}"
+                  bind:visualizerIsActive
+                  stream={webRTCComponent.GetAudioStream()}
+                />
+                <i class="fas fa-microphone {visualizerIsActive ? 'is-hidden' : ''}"></i>
+              {:else}
+                <i class="fas fa-microphone-slash"></i>
+              {/if}
             </span>
           </button>
         </div>

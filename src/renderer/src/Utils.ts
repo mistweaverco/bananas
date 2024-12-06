@@ -135,3 +135,29 @@ export const makeVideoDraggable = (video: HTMLVideoElement): void => {
     video.style.cursor = 'default'
   })
 }
+
+export const debounce = <T extends (...args: unknown[]) => void>(
+  func: T,
+  wait: number
+): ((...args: Parameters<T>) => void) => {
+  let timeout: NodeJS.Timeout
+  return (...args: Parameters<T>): void => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func(...args)
+    }, wait)
+  }
+}
+
+export const throttle = <T extends (...args: unknown[]) => void>(
+  func: T,
+  wait: number
+): ((...args: Parameters<T>) => void) => {
+  let lastCalled = 0
+  return (...args: Parameters<T>): void => {
+    const now = Date.now()
+    if (now - lastCalled < wait) return
+    lastCalled = now
+    func(...args)
+  }
+}
