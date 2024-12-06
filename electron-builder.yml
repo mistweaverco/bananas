@@ -1,5 +1,5 @@
 ---
-appId: net.getbananas
+appId: net.getbananas.desktop
 productName: bananas
 directories:
   buildResources: build
@@ -44,6 +44,7 @@ linux:
   target:
     - AppImage
     - snap
+    - flatpak
     - deb
   maintainer: getbananas.net
   category: Utility
@@ -51,6 +52,8 @@ linux:
 appImage:
   artifactName: ${name}_${arch}.${ext}
 snap:
+  artifactName: ${name}_${arch}.${ext}
+flatpak:
   artifactName: ${name}_${arch}.${ext}
 deb:
   artifactName: ${name}_${arch}.${ext}
