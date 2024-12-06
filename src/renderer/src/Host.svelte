@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import Swal from 'sweetalert2'
   import { useNavigationEnabled, useIsHosting, useHostUrl } from './stores'
   import { mayBeConnectionString, getDataFromBananasUrl, ConnectionType } from './Utils'
   import AudioVisualizer from './AudioVisualizer.svelte'
@@ -12,6 +13,7 @@
   let connectButton: HTMLButtonElement
   let copyButton: HTMLButtonElement
 
+  let connectionState = 'disconnected'
   let cursorsActive = false
   let displayStreamActive = false
   let microphoneActive = false
@@ -36,7 +38,42 @@
     }
   }
 
+  const onConnectionStateChange = (): void => {
+    switch (connectionState) {
+      case 'connected':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Connection established',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      case 'failed':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Connection failed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      case 'closed':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'Connection closed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      default:
+        break
+    }
+  }
+
   $: $connectionString, onConnectionStringChange()
+  $: connectionState, onConnectionStateChange()
 
   const toggleRemoteCursors = (): void => {
     cursorsActive = !cursorsActive
@@ -102,7 +139,7 @@
   }
 </script>
 
-<WebRTC bind:this={webRTCComponent} />
+<WebRTC bind:connectionState bind:this={webRTCComponent} />
 
 <div class="container p-5">
   <h1 class="title">{!isStreaming ? 'Host' : 'Hosting'} a session</h1>

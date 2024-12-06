@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import Swal from 'sweetalert2'
   import {
     makeVideoDraggable,
     mayBeConnectionString,
@@ -14,6 +15,7 @@
   const navigationEnabled = useNavigationEnabled()
   const isWatching = useIsWatching()
 
+  let connectionState = 'disconnected'
   let webRTCComponent: WebRTC
   let connectButton: HTMLButtonElement
   let copyButton: HTMLButtonElement
@@ -41,7 +43,42 @@
     }
   }
 
+  const onConnectionStateChange = (): void => {
+    switch (connectionState) {
+      case 'connected':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Connection established',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      case 'failed':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Connection failed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      case 'closed':
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'Connection closed',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      default:
+        break
+    }
+  }
+
   $: $connectionString, onConnectionStringChange()
+  $: connectionState, onConnectionStateChange()
 
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
@@ -116,7 +153,7 @@
   }
 </script>
 
-<WebRTC bind:this={webRTCComponent} />
+<WebRTC bind:connectionState bind:this={webRTCComponent} />
 
 <div class="container p-5">
   <h1 class="title">{!isStreaming ? 'Join' : 'Joined'} a session</h1>

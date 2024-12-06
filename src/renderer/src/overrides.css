@@ -5,3 +5,7 @@ html {
 span.color-picker div.wrapper.is-open {
   background-color: var(--bulma-border);
 }
+
+div.swal2-container div.swal2-popup {
+  background-color: var(--bulma-background);
+}
