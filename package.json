@@ -1,6 +1,6 @@
 {
   "name": "bananas",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Bananas Screen Sharing is a simple and easy-to-use screen sharing tool for Mac, Windows, and Linux.",
   "main": "./out/main/index.js",
   "author": {
@@ -26,6 +26,7 @@
     "build:linux:deb": "npm run build && electron-builder --linux deb --publish never",
     "build:linux:appimage": "npm run build && electron-builder --linux appImage --publish never",
     "build:linux:snap": "npm run build && electron-builder --linux snap --publish never",
+    "build:linux:flatpak": "npm run build && electron-builder --linux flatpak --publish never",
     "node:packages:update": "ncu -u",
     "node:packaages:upgrade": "ncu -u && npm install"
   },
