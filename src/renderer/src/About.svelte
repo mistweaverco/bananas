@@ -49,7 +49,7 @@
   </button>
   <button
     class="button is-secondary"
-    data-url="{GITHUB_REPO_URL}/PRIVACY.md"
+    data-url="{GITHUB_REPO_URL}/blob/main/PRIVACY.md"
     on:click={openExternalURL}
   >
     <span class="icon">
@@ -59,7 +59,7 @@
   </button>
   <button
     class="button is-secondary"
-    data-url="{GITHUB_REPO_URL}/TOS.md"
+    data-url="{GITHUB_REPO_URL}/blob/main/TOS.md"
     on:click={openExternalURL}
   >
     <span class="icon">
@@ -69,7 +69,7 @@
   </button>
   <button
     class="button is-secondary"
-    data-url="{GITHUB_REPO_URL}/CODE_OF_CONDUCT.md"
+    data-url="{GITHUB_REPO_URL}/blob/main/CODE_OF_CONDUCT.md"
     on:click={openExternalURL}
   >
     <span class="icon">
