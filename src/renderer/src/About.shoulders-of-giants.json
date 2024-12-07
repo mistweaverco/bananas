@@ -1,5 +1,12 @@
 [
   {
+    "title": "GitHub",
+    "description": "GitHub is a code hosting platform for version control and collaboration.",
+    "usage": "Used for hosting the source code, building and distributing the releases.",
+    "license": null,
+    "repository": "https://github.com/github"
+  },
+  {
     "title": "Electron",
     "description": "Build cross-platform desktop apps with JavaScript, HTML, and CSS.",
     "usage": "Used for building the cross-platform desktop application.",

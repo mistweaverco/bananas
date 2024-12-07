@@ -88,7 +88,8 @@
       <li>
         <p>
           <a href={shoulder.repository} target="_blank" rel="noopener">
-            <strong>{shoulder.title}</strong> - {shoulder.license} license
+            <strong>{shoulder.title}</strong>
+            {shoulder.license ? '- ' + shoulder.license : ''}
           </a>
         </p>
         <p>{shoulder.description}</p>
