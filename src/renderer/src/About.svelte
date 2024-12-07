@@ -1,5 +1,9 @@
 <script lang="ts">
   import { externalLinkClickHandler } from './Utils'
+  import shoulders from './About.shoulders-of-giants.json'
+
+  // randomize the order of the shoulders
+  const randomizedShoulders = shoulders.sort(() => Math.random() - 0.5)
 
   let version: string
   ;(async function (): Promise<void> {
@@ -73,4 +77,25 @@
     </span>
     <strong>Code of conduct</strong>
   </button>
+  <hr />
+  <h2 class="title is-4">Shoulders of Giants</h2>
+  <p>
+    Bananas Screen Sharing is built on top of the following open-source projects (in no particular
+    order):
+  </p>
+  <ul>
+    {#each randomizedShoulders as shoulder}
+      <li>
+        <p>
+          <a href={shoulder.repository} target="_blank" rel="noopener">
+            <strong>{shoulder.title}</strong>
+            {shoulder.license ? '- ' + shoulder.license : ''}
+          </a>
+        </p>
+        <p>{shoulder.description}</p>
+        <p>{shoulder.usage}</p>
+        <hr />
+      </li>
+    {/each}
+  </ul>
 </div>
