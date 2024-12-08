@@ -1,9 +1,20 @@
+export enum BananasConnectionState {
+  CONNECTED = 'connected',
+  DISCONNECTED = 'disconnected',
+  FAILED = 'failed',
+  CLOSED = 'closed'
+}
+
+type BananasRemoteCursorMovement = {
+  x: number
+  y: number
+}
+
 export type BananasRemoteCursorData = {
   id: string
   name: string
   color: string
-  x: number
-  y: number
+  movements: BananasRemoteCursorMovement[]
 }
 
 type IceServer = {
