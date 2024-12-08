@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { BananasConnectionState } from './BananasTypes'
   import { onDestroy, onMount } from 'svelte'
   import { makeVideoDraggable, getUUIDv4 } from './Utils'
   import WebRTC from './WebRTC.svelte'
   import AudioVisualizer from './AudioVisualizer.svelte'
 
   export let webRTCComponent: WebRTC
-  export let connectionState: string = 'disconnected'
+  export let connectionState: string = BananasConnectionState.DISCONNECTED
+  export let isStreaming = false
 
   // Time interval for batching cursor updates (in ms)
   const BATCH_SEND_INTERVAL = 100
@@ -13,14 +15,21 @@
   let cursorMovementQueue: { x: number; y: number }[] = []
   let batchTimer: number | null = null
 
+  let cursorsActive = false
+
   let remoteScreen: HTMLVideoElement
   let UUID = getUUIDv4()
   let zoomFactor = 1
   let microphoneActive = false
-  let isStreaming = false
   let visualizerIsActive: boolean = true
-  let isConnected = connectionState === 'connected'
+  let isConnected = connectionState === BananasConnectionState.CONNECTED
   let settings = null
+
+  const toggleRemoteCursors = (): void => {
+    cursorsActive = !cursorsActive
+    window.BananasApi.toggleRemoteCursors(cursorsActive)
+    webRTCComponent.ToggleRemoteCursors(cursorsActive)
+  }
 
   function sendBatchedCursorUpdates(): void {
     if (cursorMovementQueue.length > 0) {
@@ -130,6 +139,17 @@
             {/if}
           </span>
         </button>
+        <button
+          title={cursorsActive ? 'Remote cursors enabled' : 'Remote cursors disabled'}
+          class="button {cursorsActive ? 'is-success' : 'is-danger'} {isStreaming
+            ? ''
+            : 'is-hidden'}"
+          on:click={toggleRemoteCursors}
+        >
+          <span class="icon">
+            <i class="fas fa-mouse-pointer"></i>
+          </span>
+        </button>
       </div>
       <div class="cell has-text-right">
         <button class="button is-danger" aria-label="Disconnect" on:click={onDisconnectClick}>
@@ -149,7 +169,7 @@ Show only when not streaming, because we only want one Desktop stream at a time
 and if you are the Host, you are already streaming your screen and thus should not
 be able to see the remote screen, which would be your own screen.
 -->
-<div class={isStreaming ? 'is-hidden' : ''}>
+<div class={!isConnected || isStreaming ? 'is-hidden' : ''}>
   <div class="field">
     <label class="label" for="remote_screen">Remote screen</label>
     <div class="control">

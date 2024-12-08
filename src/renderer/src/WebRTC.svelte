@@ -1,10 +1,12 @@
 <script lang="ts">
   import type { RTCSessionDescriptionOptions } from './Utils'
   import type { BananasRemoteCursorData, SettingsData } from './BananasTypes'
+  import { BananasConnectionState } from './BananasTypes'
   import { getConnectionString, ConnectionType } from './Utils'
   import { getRTCPeerConnectionConfig } from './Config'
 
-  export let connectionState: string = 'disconnected'
+  export let connectionState: string = BananasConnectionState.DISCONNECTED
+  export let isStreaming = false
 
   const errorHander = (e: ErrorEvent): void => {
     console.error(e)
@@ -37,7 +39,7 @@
       remoteMouseCursorPositionsChannel = dc
       dc.onmessage = function (e: MessageEvent): void {
         if (!remoteCursorPositionsEnabled) return
-        if (remoteVideo) return
+        if (isStreaming) return
         const data = JSON.parse(e.data)
         window.BananasApi.updateRemoteCursor(data)
       }
@@ -46,7 +48,7 @@
       remoteCursorPingChannel = dc
       dc.onmessage = function (e: MessageEvent): void {
         if (!remoteCursorPositionsEnabled) return
-        if (remoteVideo) return
+        if (isStreaming) return
         window.BananasApi.remoteCursorPing(e.data)
       }
     }
@@ -104,9 +106,7 @@
       }
     }
     pc.ontrack = (evt): void => {
-      if (remoteVideo) {
-        remoteVideo.srcObject = evt.streams[0]
-      }
+      remoteVideo.srcObject = evt.streams[0]
       if (audioStream) {
         audioElement.srcObject = evt.streams[0]
       }
@@ -130,7 +130,7 @@
     } catch (e) {
       errorHander(e)
     }
-    if (!remoteVideo) {
+    if (isStreaming) {
       try {
         stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
