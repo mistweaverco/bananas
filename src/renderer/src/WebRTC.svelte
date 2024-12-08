@@ -63,7 +63,14 @@
       console.error('remoteMouseCursorPositionsChannel not ready')
       return
     }
-    remoteMouseCursorPositionsChannel.send(JSON.stringify(cursorData))
+    cursorData.movements.forEach((m) => {
+      const data = {
+        ...cursorData,
+        x: m.x,
+        y: m.y
+      }
+      remoteMouseCursorPositionsChannel.send(JSON.stringify(data))
+    })
   }
   export function HasAudioInput(): boolean {
     return audioStream !== null
