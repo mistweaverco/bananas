@@ -1,20 +1,27 @@
 <script lang="ts">
   import type { RTCSessionDescriptionOptions } from './Utils'
   import type { BananasRemoteCursorData, SettingsData } from './BananasTypes'
+  import { BananasConnectionState, BananasReadyState } from './BananasTypes'
   import { getConnectionString, ConnectionType } from './Utils'
   import { getRTCPeerConnectionConfig } from './Config'
+  import { onDestroy } from 'svelte'
 
-  export let connectionState: string = 'disconnected'
+  export let remoteScreen: HTMLVideoElement | null = null
+  export let connectionState: string = BananasConnectionState.DISCONNECTED
+  export let isStreaming = false
+  export let readyState: BananasReadyState = BananasReadyState.UNINITIALIZED
+  export let sessionStarted = false
+  export let isConnected = false
 
   const errorHander = (e: ErrorEvent): void => {
     console.error(e)
   }
 
-  let remoteVideo: HTMLVideoElement | null = null
   let pc: RTCPeerConnection | null = null
   let remoteCursorPositionsEnabled = false
   let remoteMouseCursorPositionsChannel: RTCDataChannel | null = null
   let remoteCursorPingChannel: RTCDataChannel | null = null
+  let signalingChannel: RTCDataChannel | null = null
   let audioStream: MediaStream | null = null
   let stream: MediaStream | null = null
   let audioElement: HTMLAudioElement | null = null
@@ -37,7 +44,7 @@
       remoteMouseCursorPositionsChannel = dc
       dc.onmessage = function (e: MessageEvent): void {
         if (!remoteCursorPositionsEnabled) return
-        if (remoteVideo) return
+        if (isStreaming) return
         const data = JSON.parse(e.data)
         window.BananasApi.updateRemoteCursor(data)
       }
@@ -46,8 +53,14 @@
       remoteCursorPingChannel = dc
       dc.onmessage = function (e: MessageEvent): void {
         if (!remoteCursorPositionsEnabled) return
-        if (remoteVideo) return
+        if (isStreaming) return
         window.BananasApi.remoteCursorPing(e.data)
+      }
+    }
+    if (dc.label === 'signaling') {
+      signalingChannel = dc
+      dc.onopen = function (): void {
+        readyState = BananasReadyState.READY
       }
     }
   }
@@ -63,7 +76,14 @@
       console.error('remoteMouseCursorPositionsChannel not ready')
       return
     }
-    remoteMouseCursorPositionsChannel.send(JSON.stringify(cursorData))
+    cursorData.movements.forEach((m) => {
+      const data = {
+        ...cursorData,
+        x: m.x,
+        y: m.y
+      }
+      remoteMouseCursorPositionsChannel.send(JSON.stringify(data))
+    })
   }
   export function HasAudioInput(): boolean {
     return audioStream !== null
@@ -77,9 +97,8 @@
     remoteCursorPositionsEnabled = enabled
     return enabled
   }
-  export async function Setup(v: HTMLVideoElement = null): Promise<void> {
+  export async function Setup(): Promise<void> {
     userSettings = await window.BananasApi.getSettings()
-    remoteVideo = v
     audioElement = document.createElement('audio')
     audioElement.controls = true
     audioElement.autoplay = true
@@ -95,11 +114,12 @@
       if (e.channel.label === 'remoteCursorPing') {
         setupDataChannel(e.channel)
       }
+      if (e.channel.label === 'signaling') {
+        setupDataChannel(e.channel)
+      }
     }
     pc.ontrack = (evt): void => {
-      if (remoteVideo) {
-        remoteVideo.srcObject = evt.streams[0]
-      }
+      remoteScreen.srcObject = evt.streams[0]
       if (audioStream) {
         audioElement.srcObject = evt.streams[0]
       }
@@ -123,7 +143,7 @@
     } catch (e) {
       errorHander(e)
     }
-    if (!remoteVideo) {
+    if (isStreaming) {
       try {
         stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
@@ -169,8 +189,10 @@
   export async function CreateHostUrl(data: { username: string }): Promise<string> {
     remoteMouseCursorPositionsChannel = pc.createDataChannel('remoteMouseCursorPositions')
     remoteCursorPingChannel = pc.createDataChannel('remoteCursorPing')
+    signalingChannel = pc.createDataChannel('signaling')
     setupDataChannel(remoteMouseCursorPositionsChannel)
     setupDataChannel(remoteCursorPingChannel)
+    setupDataChannel(signalingChannel)
     const desc = await pc.createOffer()
     await pc.setLocalDescription(desc)
     return await getConnectionString(ConnectionType.HOST, pc.localDescription, data)
@@ -231,5 +253,61 @@
     } catch (e) {
       errorHander(e)
     }
+    readyState = BananasReadyState.UNINITIALIZED
+    sessionStarted = false
+    isConnected = false
   }
+
+  onDestroy(() => {
+    // Close the peer connection
+    if (pc) {
+      pc.close()
+      pc = null
+    }
+
+    // Stop and release all tracks in the audio stream
+    if (audioStream) {
+      for (const track of audioStream.getTracks()) {
+        track.stop()
+      }
+      audioStream = null
+    }
+
+    // Stop and release all tracks in the display/media stream
+    if (stream) {
+      for (const track of stream.getTracks()) {
+        track.stop()
+      }
+      stream = null
+    }
+
+    // Clean up data channels
+    if (signalingChannel) {
+      signalingChannel.close()
+      signalingChannel = null
+    }
+
+    if (remoteMouseCursorPositionsChannel) {
+      remoteMouseCursorPositionsChannel.close()
+      remoteMouseCursorPositionsChannel = null
+    }
+
+    if (remoteCursorPingChannel) {
+      remoteCursorPingChannel.close()
+      remoteCursorPingChannel = null
+    }
+
+    // Reset other references
+    if (audioElement) {
+      audioElement.srcObject = null
+      audioElement = null
+    }
+
+    if (remoteScreen) {
+      remoteScreen.srcObject = null
+    }
+
+    userSettings = null
+    remoteCursorPositionsEnabled = false
+  })
 </script>
