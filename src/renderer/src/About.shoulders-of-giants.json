@@ -1,93 +1,100 @@
 [
   {
+    "title": "Discord",
+    "description": "Discord is a voice, video and text communication service to talk and hang out with your friends and communities.",
+    "usage": "Used for supporting the community and providing help.",
+    "license": null,
+    "url": "https://discord.com/"
+  },
+  {
     "title": "GitHub",
     "description": "GitHub is a code hosting platform for version control and collaboration.",
     "usage": "Used for hosting the source code, building and distributing the releases.",
     "license": null,
-    "repository": "https://github.com/github"
+    "url": "https://github.com/github"
   },
   {
     "title": "Electron",
     "description": "Build cross-platform desktop apps with JavaScript, HTML, and CSS.",
     "usage": "Used for building the cross-platform desktop application.",
     "license": "MIT",
-    "repository": "https://github.com/electron/electron"
+    "url": "https://github.com/electron/electron"
   },
   {
     "title": "Electron Builder",
     "description": "A complete solution to package and build a ready for distribution Electron app with 'auto update' support out of the box.",
     "usage": "Used for building the cross-platform desktop application.",
     "license": "MIT",
-    "repository": "https://github.com/electron-userland/electron-builder"
+    "url": "https://github.com/electron-userland/electron-builder"
   },
   {
     "title": "Svelte",
     "description": "Cybernetically enhanced web apps.",
     "usage": "Used for building the user interface.",
     "license": "MIT",
-    "repository": "https://github.com/sveltejs/svelte"
+    "url": "https://github.com/sveltejs/svelte"
   },
   {
     "title": "Bulma",
     "description": "A modern CSS framework based on Flexbox.",
     "usage": "Used for styling the user interface.",
     "license": "MIT",
-    "repository": "https://github.com/jgthms/bulma"
+    "url": "https://github.com/jgthms/bulma"
   },
   {
     "title": "eslint",
     "description": "Find and fix problems in your JavaScript code.",
     "usage": "Used for linting the application.",
     "license": "MIT",
-    "repository": "https://github.com/eslint/eslint"
+    "url": "https://github.com/eslint/eslint"
   },
   {
     "title": "prettier",
     "description": "An opinionated code formatter.",
     "usage": "Used for formatting the application.",
     "license": "MIT",
-    "repository": "https://github.com/prettier/prettier"
+    "url": "https://github.com/prettier/prettier"
   },
   {
     "title": "Vscode",
     "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications.",
     "usage": "Used for writing the application.",
     "license": "MIT",
-    "repository": "https://github.com/microsoft/vscode"
+    "url": "https://github.com/microsoft/vscode"
   },
   {
     "title": "Neovim",
     "description": "Vim-fork focused on extensibility and usability.",
     "usage": "Used for writing the application.",
     "license": "Apache-2.0",
-    "repository": "https://github.com/neovim/neovim"
+    "url": "https://github.com/neovim/neovim"
   },
   {
     "title": "Vite",
     "description": "A build tool that aims to provide a faster and leaner development experience for modern web projects.",
     "usage": "Used for building and developing the application.",
     "license": "MIT",
-    "repository": "https://github.com/vitejs/vite"
+    "url": "https://github.com/vitejs/vite"
   },
   {
     "title": "TypeScript",
     "description": "TypeScript is a superset of JavaScript that compiles to clean JavaScript output.",
     "usage": "Used for writing the application in a statically typed language.",
     "license": "Apache-2.0",
-    "repository": "https://github.com/microsoft/TypeScript"
+    "url": "https://github.com/microsoft/TypeScript"
   },
   {
     "title": "Bun",
     "description": "Bun is an all-in-one toolkit for JavaScript and TypeScript apps.",
     "usage": "Used for installing and managing dependencies and running scripts.",
     "license": "MIT",
-    "repository": "https://github.com/oven-sh/bun"
+    "url": "https://github.com/oven-sh/bun"
   },
   {
     "title": "SweetAlert2",
     "description": "A beautiful, responsive, customizable, accessible (WAI-ARIA) replacement for JavaScript's popup boxes.",
     "usage": "Used for displaying alerts and modals.",
     "license": "MIT",
-    "repository": "https://github.com/sweetalert2/sweetalert2"
+    "url": "https://github.com/sweetalert2/sweetalert2"
   }
 ]
