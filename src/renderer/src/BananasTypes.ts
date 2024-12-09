@@ -1,3 +1,15 @@
+export enum BananasConnectionState {
+  CONNECTED = 'connected',
+  DISCONNECTED = 'disconnected',
+  FAILED = 'failed',
+  CLOSED = 'closed'
+}
+
+export enum BananasReadyState {
+  READY = 'ready',
+  UNINITIALIZED = 'uninitialized'
+}
+
 type BananasRemoteCursorMovement = {
   x: number
   y: number

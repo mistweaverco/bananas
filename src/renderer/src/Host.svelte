@@ -1,30 +1,34 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import Swal from 'sweetalert2'
+  import { BananasConnectionState, BananasReadyState } from './BananasTypes'
   import { useNavigationEnabled, useIsHosting, useHostUrl } from './stores'
   import { mayBeConnectionString, getDataFromBananasUrl, ConnectionType } from './Utils'
-  import AudioVisualizer from './AudioVisualizer.svelte'
   import WebRTC from './WebRTC.svelte'
+  import StreamInterface from './StreamInterface.svelte'
+  import RemoteScreen from './RemoteScreen.svelte'
 
   const navigationEnabled = useNavigationEnabled()
   const isHosting = useIsHosting()
 
-  let webRTCComponent: WebRTC
+  let remoteScreen: HTMLVideoElement
   let connectButton: HTMLButtonElement
-  let copyButton: HTMLButtonElement
-
-  let connectionState = 'disconnected'
-  let cursorsActive = false
-  let displayStreamActive = false
-  let microphoneActive = false
-  let isStreaming = false
-  let sessionStarted = false
-  let connectionStringIsValid: boolean | null = null
   let connectToUserName = ''
-  let copyButtonIsLoading = false
+  let connectionState = BananasConnectionState.DISCONNECTED
   let connectionString = useHostUrl()
-  let hasAudioInput = false
-  let visualizerIsActive: boolean = true
+  let connectionStringIsValid: boolean | null = null
+  let copyButton: HTMLButtonElement
+  let copyButtonIsLoading = false
+  let isConnected = false
+  let isReady = false
+  let isStreaming = false
+  let readyState = BananasReadyState.UNINITIALIZED
+  let sessionStarted = false
+  let webRTCComponent: WebRTC
+
+  $: isConnected = connectionState === BananasConnectionState.CONNECTED
+  $: readyState, onReadyStateChange()
+  $: isReady = readyState === BananasReadyState.READY
 
   const onConnectionStringChange = async (): Promise<void> => {
     if ($connectionString === '') {
@@ -33,23 +37,30 @@
     }
     connectionStringIsValid = mayBeConnectionString(ConnectionType.PARTICIPANT, $connectionString)
     if (connectionStringIsValid) {
-      const banansData = await getDataFromBananasUrl($connectionString)
-      connectToUserName = banansData.data.username
+      const bananasData = await getDataFromBananasUrl($connectionString)
+      connectToUserName = bananasData.data.username
+    }
+  }
+
+  const onReadyStateChange = (): void => {
+    switch (readyState) {
+      case BananasReadyState.READY:
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Connection ready',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        break
+      default:
+        break
     }
   }
 
   const onConnectionStateChange = (): void => {
     switch (connectionState) {
-      case 'connected':
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Connection established',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        break
-      case 'failed':
+      case BananasConnectionState.FAILED:
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -58,7 +69,7 @@
           timer: 1500
         })
         break
-      case 'closed':
+      case BananasConnectionState.CLOSED:
         Swal.fire({
           position: 'top-end',
           icon: 'info',
@@ -75,20 +86,11 @@
   $: $connectionString, onConnectionStringChange()
   $: connectionState, onConnectionStateChange()
 
-  const toggleRemoteCursors = (): void => {
-    cursorsActive = !cursorsActive
-    window.BananasApi.toggleRemoteCursors(cursorsActive)
-    webRTCComponent.ToggleRemoteCursors(cursorsActive)
-  }
-
   onMount(async () => {
     const settings = await window.BananasApi.getSettings()
-    microphoneActive = settings.isMicrophoneEnabledOnConnect
     connectButton.addEventListener('click', async () => {
       const data = await getDataFromBananasUrl($connectionString)
       await webRTCComponent.Connect(data.rtcSessionDescription)
-      isStreaming = true
-      displayStreamActive = true
     })
     copyButton.addEventListener('click', async () => {
       copyButtonIsLoading = true
@@ -106,13 +108,9 @@
     sessionStarted = true
     $navigationEnabled = false
     $isHosting = true
-    hasAudioInput = webRTCComponent.HasAudioInput()
   }
   const reset = (): void => {
     $connectionString = ''
-    cursorsActive = false
-    displayStreamActive = false
-    microphoneActive = true
     isStreaming = false
     sessionStarted = false
     connectionStringIsValid = null
@@ -124,86 +122,25 @@
     await webRTCComponent.Disconnect()
     reset()
   }
-  const onMicrophoneToggle = async (): Promise<void> => {
-    microphoneActive = !microphoneActive
-    webRTCComponent.ToggleMicrophone()
-  }
-  const onDisplayStreamToggle = async (): Promise<void> => {
-    displayStreamActive = !displayStreamActive
-    webRTCComponent.ToggleDisplayStream()
-    if (!displayStreamActive) {
-      cursorsActive = false
-      window.BananasApi.toggleRemoteCursors(cursorsActive)
-      webRTCComponent.ToggleRemoteCursors(cursorsActive)
-    }
-  }
 </script>
 
-<WebRTC bind:connectionState bind:this={webRTCComponent} />
+<WebRTC
+  bind:connectionState
+  bind:isConnected
+  bind:isStreaming
+  bind:readyState
+  bind:remoteScreen
+  bind:sessionStarted
+  bind:this={webRTCComponent}
+/>
 
-<div class="container p-5">
-  <h1 class="title">{!isStreaming ? 'Host' : 'Hosting'} a session</h1>
-  <div class={!isStreaming ? 'is-hidden' : ''}>
-    <div class="fixed-grid">
-      <div class="grid">
-        <div class="cell">
-          <button
-            title={displayStreamActive ? 'Streaming your display' : 'Not streaming your display'}
-            class="button {displayStreamActive ? 'is-success' : 'is-danger'}"
-            on:click={onDisplayStreamToggle}
-          >
-            <span class="icon">
-              <i class="fa-solid fa-display"></i>
-            </span>
-          </button>
-          {#if hasAudioInput}
-            <button
-              title={microphoneActive ? 'Microphone active' : 'Microphone muted'}
-              class="button {microphoneActive ? 'is-success' : 'is-danger'}"
-              on:click={onMicrophoneToggle}
-            >
-              <span class="icon">
-                {#if microphoneActive}
-                  <AudioVisualizer
-                    className="icon {!visualizerIsActive ? 'is-hidden' : ''}"
-                    bind:visualizerIsActive
-                    stream={webRTCComponent.GetAudioStream()}
-                  />
-                  <i class="fas fa-microphone {visualizerIsActive ? 'is-hidden' : ''}"></i>
-                {:else}
-                  <i class="fas fa-microphone-slash"></i>
-                {/if}
-              </span>
-            </button>
-          {/if}
-          <button
-            title={cursorsActive ? 'Remote cursors enabled' : 'Remote cursors disabled'}
-            class="button {cursorsActive ? 'is-success' : 'is-danger'} {!displayStreamActive
-              ? 'is-hidden'
-              : ''}"
-            on:click={toggleRemoteCursors}
-          >
-            <span class="icon">
-              <i class="fas fa-mouse-pointer"></i>
-            </span>
-          </button>
-        </div>
-        <div class="cell has-text-right">
-          <button class="button is-danger" on:click={onDisconnectClick}>
-            <span class="icon">
-              <i class="fas fa-unlink"></i>
-            </span>
-            <span>Disconnect</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container p-5 {isReady ? 'is-hidden' : ''}">
+  <h1 class="title">{!sessionStarted ? 'Host' : 'Hosting'} a session</h1>
   <div class="fixed-grid has-2-cols">
     <div class="grid">
       <div class="cell">
         <button
-          class="button is-link {isStreaming ? 'is-hidden' : ''}"
+          class="button is-link {isConnected ? 'is-hidden' : ''}"
           disabled={sessionStarted}
           on:click={onStartSessionButtonClick}
         >
@@ -216,7 +153,7 @@
 
       <div class="cell">
         <button
-          class="button is-danger {!sessionStarted || isStreaming ? 'is-hidden' : ''}"
+          class="button is-danger {!sessionStarted ? 'is-hidden' : ''}"
           on:click={onDisconnectClick}
         >
           <span class="icon">
@@ -228,9 +165,9 @@
 
       <div class="cell">
         <button
-          class="button is-link {!sessionStarted || isStreaming
-            ? 'is-hidden'
-            : ''} {copyButtonIsLoading ? 'is-loading' : ''}"
+          class="button is-link {!sessionStarted ? 'is-hidden' : ''} {copyButtonIsLoading
+            ? 'is-loading'
+            : ''}"
           bind:this={copyButton}
         >
           <span class="icon">
@@ -241,7 +178,7 @@
       </div>
     </div>
 
-    <div class="field has-addons {!sessionStarted || isStreaming ? 'is-hidden' : ''}">
+    <div class="field has-addons {!sessionStarted ? 'is-hidden' : ''}">
       <div class="control has-icons-left has-icons-right">
         <input
           bind:value={$connectionString}
@@ -285,3 +222,7 @@
     </div>
   </div>
 </div>
+
+<StreamInterface bind:isReady bind:isStreaming bind:webRTCComponent />
+
+<RemoteScreen bind:remoteScreen />
