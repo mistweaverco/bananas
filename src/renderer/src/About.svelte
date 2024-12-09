@@ -87,7 +87,7 @@
     {#each randomizedShoulders as shoulder}
       <li>
         <p>
-          <a href={shoulder.repository} target="_blank" rel="noopener">
+          <a href={shoulder.url} target="_blank" rel="noopener">
             <strong>{shoulder.title}</strong>
             {shoulder.license ? '- ' + shoulder.license : ''}
           </a>
