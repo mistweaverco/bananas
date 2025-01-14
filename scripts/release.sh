@@ -10,9 +10,13 @@ FILES=()
 
 LINUX_FILES=(
   "dist/${BIN_NAME}_amd64.deb"
+  "dist/${BIN_NAME}_arm64.deb"
   "dist/${BIN_NAME}_amd64.snap"
+  "dist/${BIN_NAME}_arm64.snap"
   "dist/${BIN_NAME}_x86_64.AppImage"
+  "dist/${BIN_NAME}_arm64.AppImage"
   "dist/${BIN_NAME}_x86_64.flatpak"
+  "dist/${BIN_NAME}_arm64.flatpak"
 )
 
 WINDOWS_FILES=(
