@@ -24,6 +24,7 @@ nsis:
   installerIcon: build/icon.ico
   oneClick: false
   perMachine: false
+  allowToChangeInstallationDirectory: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
