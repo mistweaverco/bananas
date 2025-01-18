@@ -6,5 +6,7 @@ export const initFormatters: FormattersInitializer<Locales, Formatters> = (local
     // add your formatter functions here
   }
 
+  console.log(locale)
+
   return formatters
 }
