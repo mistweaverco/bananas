@@ -23,6 +23,7 @@ declare global {
       }) => Promise<void>
       updateSettings: (settings: {
         username: string
+        language: string
         color: string
         isMicrophoneEnabledOnConnect: boolean
         iceServers: IceServer[]
@@ -30,6 +31,7 @@ declare global {
       getSettings: () => Promise<{
         username: string
         color: string
+        language: string
         isMicrophoneEnabledOnConnect: boolean
         iceServers: IceServer[]
       }>

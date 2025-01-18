@@ -1,10 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import ColorPicker from 'svelte-awesome-color-picker'
+  import { L } from './translations'
 
   let colorPreviewIcon: HTMLElement
   let usernameValue: string = 'Banana Joe'
   let colorValue: string = '#ffffff'
+  let language = 'en'
+  const languageOptions = ['en', 'de', 'zh']
   let iceServersValue: string = '{ "urls": "stun:stun.l.google.com:19302" }'
   let isUsernameValid = false
   let isColorValid = false
@@ -53,6 +56,7 @@
       await window.BananasApi.updateSettings({
         username: usernameValue,
         color: colorValue,
+        language,
         isMicrophoneEnabledOnConnect,
         iceServers: iceServersValue.split('\n').map((srv) => JSON.parse(srv))
       })
@@ -71,6 +75,7 @@
     const settings = await window.BananasApi.getSettings()
     usernameValue = settings.username
     colorValue = settings.color
+    language = settings.language
     isMicrophoneEnabledOnConnect = settings.isMicrophoneEnabledOnConnect
     iceServersValue = settings.iceServers.map((srv) => JSON.stringify(srv)).join('\n')
   })
@@ -97,11 +102,11 @@
 </div>
 
 <div class="container p-5 content">
-  <h1 class="title">Settings</h1>
-  <h2>Basic</h2>
+  <h1 class="title">{L.settings()}</h1>
+  <h2>{L.basic()}</h2>
   <form class="form" on:submit={onSubmit}>
     <div class="field">
-      <label class="label" for="username">Username</label>
+      <label class="label" for="username">{L.username()}</label>
       <div class="control has-icons-left has-icons-right">
         <input
           bind:value={usernameValue}
@@ -117,7 +122,7 @@
     </div>
 
     <div class="field">
-      <label class="label" for="color">Color</label>
+      <label class="label" for="color">{L.color()}</label>
       <div class="control has-icons-left has-icons-right">
         <input
           bind:value={colorValue}
@@ -132,6 +137,22 @@
         <ColorPicker bind:hex={colorValue} isTextInput={false} isAlpha={false} />
       </div>
     </div>
+    <div class="field">
+      <label class="label" for="translation">{L.language()}</label>
+      <div class="control has-icons-left has-icons-right">
+        <div class="select">
+          <select bind:value={language}>
+            {#each languageOptions as lang}
+              <option>{lang}</option>
+            {/each}
+          </select>
+        </div>
+        <span class="icon is-small is-left">
+          <i class="fa fa-language"></i>
+        </span>
+      </div>
+      <p class="help">{L.language_description()}</p>
+    </div>
 
     <h2>Media</h2>
 
@@ -145,17 +166,15 @@
             id="microphone_active_on_connect"
             placeholder="#fffff"
           />
-          Is microphone active on connect
+          {L.is_microphone_active_on_connect()}
         </label>
       </div>
     </div>
 
-    <h2>Advanced</h2>
+    <h2>{L.advanced()}</h2>
 
     <div class="field">
-      <label class="label" for="ice_servers"
-        >STUN/TURN Server Objects (separated by new lines)</label
-      >
+      <label class="label" for="ice_servers">{L.stun_turn_server_objects()}</label>
       <div class="control has-icons-left has-icons-right">
         <textarea
           bind:value={iceServersValue}

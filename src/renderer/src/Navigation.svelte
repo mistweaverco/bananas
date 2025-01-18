@@ -1,5 +1,6 @@
 <script lang="ts">
   import { useActiveView, useNavigationEnabled, useIsWatching, useIsHosting } from './stores'
+  import { L } from './translations'
   const activeView = useActiveView()
   const isHosting = useIsHosting()
   const isWatching = useIsWatching()
@@ -29,7 +30,7 @@
               <span class="icon">
                 <i class="fa-solid fa-right-to-bracket"></i>
               </span>
-              <strong>Join{!$isWatching ? '' : 'ed'} a session</strong>
+              <strong>{!$isWatching ? L.join_a_session() : L.joined_a_session()}</strong>
             </button>
             <button
               class="button is-secondary {$activeView === 'host'
@@ -42,7 +43,7 @@
               <span class="icon">
                 <i class="fa-solid fa-earth-africa"></i>
               </span>
-              <strong>{!$isHosting ? 'Host a session' : 'Hosting a session'}</strong>
+              <strong>{!$isHosting ? L.host_a_session() : L.hosting_a_session()}</strong>
             </button>
             <button
               class="button is-secondary {$activeView === 'settings'
@@ -55,7 +56,7 @@
               <span class="icon">
                 <i class="fa-solid fa-gear"></i>
               </span>
-              <strong>Settings</strong>
+              <strong>{L.settings()}</strong>
             </button>
             <button
               class="button is-secondary {$activeView === 'about'
@@ -68,7 +69,7 @@
               <span class="icon">
                 <i class="fa-solid fa-question"></i>
               </span>
-              <strong>About</strong>
+              <strong>{L.about()}</strong>
             </button>
           </div>
         </div>

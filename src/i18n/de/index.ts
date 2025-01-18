@@ -1,0 +1,52 @@
+import type { BaseTranslation } from '../i18n-types'
+
+const en = {
+  about: 'Über',
+  advanced: 'Erweitert',
+  basic: 'Grundlegend',
+  cancel: 'Abbrechen',
+  choose_a_color: 'Wähle eine Farbe',
+  code_of_conduct: 'Verhaltenskodex',
+  color: 'Farbe',
+  connect: 'Verbinden',
+  connection_established: 'Verbindung hergestellt',
+  copy_my_connection_string: 'Kopiere meine Verbindungszeichenfolge',
+  disconnect: 'Trennen',
+  fullscreen: 'Vollbild',
+  host_a_session: 'Eine Sitzung hosten',
+  host_connection_string: 'Host-Verbindungszeichenfolge',
+  hosting_a_session: 'Eine Sitzung hosten',
+  is_microphone_active_on_connect: 'Ist das Mikrofon bei der Verbindung aktiviert?',
+  join_a_session: 'Einer Sitzung beitreten',
+  joined_a_session: 'Einer Sitzung beigetreten',
+  language: 'Sprache',
+  language_description:
+    'Wähle deine bevorzugte Sprache (nach dem Ändern der Sprache musst du die App neu starten)',
+  media: 'Media',
+  microphone_active: 'Mikrofon aktiv',
+  microphone_inactive: 'Mikrofon inaktiv',
+  not_streaming_your_display: 'Dein Bildschirm wird nicht gestreamt',
+  participant_connection_string: 'Teilnehmer-Verbindungszeichenfolge',
+  privacty_policy: 'Privatsphärenrichtlinie',
+  remote_cursors_disabled: 'Remote cursors deaktiviert',
+  remote_cursors_enabled: 'Remote cursors aktiviert',
+  remote_screen: 'Remote screen',
+  report_a_bug: 'Einen Fehler melden',
+  save: 'Speichern',
+  see_the_code: 'Sieh dir den Code an',
+  session_started: 'Sitzung gestartet',
+  settings: 'Einstellungen',
+  shoulders_of_giants: 'Auf den Schultern von Giganten',
+  shoulders_of_giants_description:
+    'Bananas Screen Sharing baut auf den folgenden Open-Source-Projekten auf (in keiner bestimmten Reihenfolge)',
+  start_a_new_session: 'Eine neue Sitzung starten',
+  streaming_your_display: 'Dein Bildschirm wird gestreamt',
+  stun_turn_server_objects: 'STUN/TURN Objekte (getrennt durch Zeilenumbruch)',
+  terms_of_service: 'Nutzungsbedingungen',
+  username: 'Benutzername',
+  website: 'Website',
+  zoom_in: 'Hineinzoomen',
+  zoom_out: 'Herauszoomen'
+} satisfies BaseTranslation
+
+export default en
