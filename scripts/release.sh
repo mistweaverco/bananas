@@ -15,6 +15,12 @@ LINUX_FILES=(
   "dist/${BIN_NAME}_x86_64.flatpak"
 )
 
+LINUX_ARM64_FILES=(
+  "dist/${BIN_NAME}_arm64.deb"
+  "dist/${BIN_NAME}_arm64.AppImage"
+  "dist/${BIN_NAME}_aarch64.flatpak"
+)
+
 WINDOWS_FILES=(
   "dist/${BIN_NAME}-setup_x64.exe"
 )
@@ -55,6 +61,9 @@ set_files_based_on_platform() {
   case $PLATFORM in
     linux)
       FILES=("${LINUX_FILES[@]}")
+      ;;
+    linux-arm64)
+      FILES=("${LINUX_ARM64_FILES[@]}")
       ;;
     windows)
       FILES=("${WINDOWS_FILES[@]}")
