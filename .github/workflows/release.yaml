@@ -6,6 +6,51 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
+  build-linux-arm64:
+    name: Build Linux ARM64
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up env
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "PLATFORM=linux-arm64" >> $GITHUB_ENV
+      - name: Install OS packages
+        run: |
+          sudo apt-get install -y flatpak flatpak-builder && \
+          sudo snap install snapcraft --classic && \
+          flatpak remote-add \
+          --user \
+          --if-not-exists \
+          flathub https://flathub.org/repo/flathub.flatpakrepo
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Cache Bun
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: linux-arm64-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            linux-arm64-bun-${{ hashFiles('**/bun.lockb') }}
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron/
+          key: linux-arm64-electron-${{ hashFiles('~/.cache/electron/**') }}
+          restore-keys: |
+            linux-arm64-electron-${{ hashFiles('~/.cache/electron/**') }}
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Build Linux
+        run: ./scripts/build.sh
+      - name: Linux Release
+        run: ./scripts/release.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-linux:
     name: Build Linux
     runs-on: ubuntu-latest
