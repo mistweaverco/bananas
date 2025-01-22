@@ -67,6 +67,7 @@ jobs:
       - name: Install OS packages
         run: |
           sudo apt-get install -y flatpak flatpak-builder && \
+          sudo snap install snapcraft --classic && \
           flatpak remote-add \
             --user \
             --if-not-exists \
