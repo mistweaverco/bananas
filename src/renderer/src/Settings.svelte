@@ -7,7 +7,7 @@
   let usernameValue: string = 'Banana Joe'
   let colorValue: string = '#ffffff'
   let language = 'en'
-  const languageOptions = ['en', 'de', 'zh']
+  const languageOptions = ['en', 'de', 'fr', 'zh']
   let iceServersValue: string = '{ "urls": "stun:stun.l.google.com:19302" }'
   let isUsernameValid = false
   let isColorValid = false
