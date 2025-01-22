@@ -1,0 +1,52 @@
+import type { BaseTranslation } from '../i18n-types'
+
+const fr = {
+  about: 'À propos',
+  advanced: 'Avancé',
+  basic: 'De base',
+  cancel: 'Annuler',
+  choose_a_color: 'Choisir une couleur',
+  code_of_conduct: 'Code de conduite',
+  color: 'Couleur',
+  connect: 'Connecter',
+  connection_established: 'Connexion établie',
+  copy_my_connection_string: 'Copier ma chaîne de connexion',
+  disconnect: 'Déconnecter',
+  fullscreen: 'Plein écran',
+  host_a_session: 'Héberger une session',
+  host_connection_string: 'Chaîne de connexion de l’hôte',
+  hosting_a_session: 'Hébergement d’une session',
+  is_microphone_active_on_connect: 'Le microphone est-il actif à la connexion',
+  join_a_session: 'Rejoindre une session',
+  joined_a_session: 'Session rejointe',
+  language: 'Langue',
+  language_description:
+    "Choisissez votre langue préférée (après avoir changé la langue, vous devez redémarrer l'application)",
+  media: 'Médias',
+  microphone_active: 'Microphone actif',
+  microphone_inactive: 'Microphone inactif',
+  not_streaming_your_display: 'Ne diffuse pas votre écran',
+  participant_connection_string: 'Chaîne de connexion du participant',
+  privacty_policy: 'Politique de confidentialité',
+  remote_cursors_disabled: 'Curseurs distants désactivés',
+  remote_cursors_enabled: 'Curseurs distants activés',
+  remote_screen: 'Écran distant',
+  report_a_bug: 'Signaler un bug',
+  save: 'Enregistrer',
+  see_the_code: 'Voir le code',
+  session_started: 'Session commencée',
+  settings: 'Paramètres',
+  shoulders_of_giants: 'Épaules des géants',
+  shoulders_of_giants_description:
+    'Bananas Screen Sharing est construit sur les projets open-source suivants (dans un ordre aléatoire)',
+  start_a_new_session: 'Commencer une nouvelle session',
+  streaming_your_display: 'Diffusion de votre écran',
+  stun_turn_server_objects: 'Objets du serveur STUN/TURN (séparés par des nouvelles lignes)',
+  terms_of_service: 'Conditions de service',
+  username: 'Nom d’utilisateur',
+  website: 'Site web',
+  zoom_in: 'Zoomer',
+  zoom_out: 'Dézoomer'
+} satisfies BaseTranslation
+
+export default fr

@@ -5,7 +5,7 @@ import type { BaseTranslation as BaseTranslationType, LocalizedString } from 'ty
 export type BaseTranslation = BaseTranslationType
 export type BaseLocale = 'en'
 
-export type Locales = 'de' | 'en' | 'zh'
+export type Locales = 'de' | 'en' | 'fr' | 'zh'
 
 export type Translation = RootTranslation
 
