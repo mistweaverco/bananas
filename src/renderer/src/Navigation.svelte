@@ -30,7 +30,7 @@
               <span class="icon">
                 <i class="fa-solid fa-right-to-bracket"></i>
               </span>
-              <strong>{!$isWatching ? L.join_a_session() : L.joined_a_session()}</strong>
+              <strong>{!$isWatching ? $L.join_a_session() : $L.joined_a_session()}</strong>
             </button>
             <button
               class="button is-secondary {$activeView === 'host'
@@ -43,7 +43,7 @@
               <span class="icon">
                 <i class="fa-solid fa-earth-africa"></i>
               </span>
-              <strong>{!$isHosting ? L.host_a_session() : L.hosting_a_session()}</strong>
+              <strong>{!$isHosting ? $L.host_a_session() : $L.hosting_a_session()}</strong>
             </button>
             <button
               class="button is-secondary {$activeView === 'settings'
@@ -56,7 +56,7 @@
               <span class="icon">
                 <i class="fa-solid fa-gear"></i>
               </span>
-              <strong>{L.settings()}</strong>
+              <strong>{$L.settings()}</strong>
             </button>
             <button
               class="button is-secondary {$activeView === 'about'
@@ -69,7 +69,7 @@
               <span class="icon">
                 <i class="fa-solid fa-question"></i>
               </span>
-              <strong>{L.about()}</strong>
+              <strong>{$L.about()}</strong>
             </button>
           </div>
         </div>

@@ -22,7 +22,7 @@
 </script>
 
 <div class="container p-5 content">
-  <h1 class="title">{L.about()}</h1>
+  <h1 class="title">{$L.about()}</h1>
   <p>You are using <code>{version}</code> of Bananas Screen Sharing</p>
   <hr />
 
@@ -30,7 +30,7 @@
     <span class="icon">
       <i class="fa-solid fa-globe"></i>
     </span>
-    <strong>{L.website()}</strong>
+    <strong>{$L.website()}</strong>
   </button>
   <button
     class="button is-secondary"
@@ -40,13 +40,13 @@
     <span class="icon">
       <i class="fa-solid fa-bug"></i>
     </span>
-    <strong>{L.report_a_bug()}</strong>
+    <strong>{$L.report_a_bug()}</strong>
   </button>
   <button class="button is-secondary" data-url={GITHUB_REPO_URL} on:click={openExternalURL}>
     <span class="icon">
       <i class="fa-solid fa-code"></i>
     </span>
-    <strong>{L.see_the_code()}</strong>
+    <strong>{$L.see_the_code()}</strong>
   </button>
   <button
     class="button is-secondary"
@@ -56,7 +56,7 @@
     <span class="icon">
       <i class="fa-solid fa-lock"></i>
     </span>
-    <strong>{L.privacty_policy()}</strong>
+    <strong>{$L.privacty_policy()}</strong>
   </button>
   <button
     class="button is-secondary"
@@ -66,7 +66,7 @@
     <span class="icon">
       <i class="fa-solid fa-book"></i>
     </span>
-    <strong>{L.terms_of_service()}</strong>
+    <strong>{$L.terms_of_service()}</strong>
   </button>
   <button
     class="button is-secondary"
@@ -76,12 +76,12 @@
     <span class="icon">
       <i class="fa-solid fa-heart"></i>
     </span>
-    <strong>{L.code_of_conduct()}</strong>
+    <strong>{$L.code_of_conduct()}</strong>
   </button>
   <hr />
-  <h2 class="title is-4">{L.shoulders_of_giants()}</h2>
+  <h2 class="title is-4">{$L.shoulders_of_giants()}</h2>
   <p>
-    {L.shoulders_of_giants_description()}
+    {$L.shoulders_of_giants_description()}
   </p>
   <ul>
     {#each randomizedShoulders as shoulder}

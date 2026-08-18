@@ -143,13 +143,13 @@
 <WebRTC bind:connectionState bind:this={webRTCComponent} />
 
 <div class="container p-5">
-  <h1 class="title">{!isStreaming ? L.host_a_session() : L.hosting_a_session()}</h1>
+  <h1 class="title">{!isStreaming ? $L.host_a_session() : $L.hosting_a_session()}</h1>
   <div class={!isStreaming ? 'is-hidden' : ''}>
     <div class="fixed-grid">
       <div class="grid">
         <div class="cell">
           <button
-            title={displayStreamActive ? L.streaming_your_display() : L.streaming_your_display()}
+            title={displayStreamActive ? $L.streaming_your_display() : $L.streaming_your_display()}
             class="button {displayStreamActive ? 'is-success' : 'is-danger'}"
             on:click={onDisplayStreamToggle}
           >
@@ -178,7 +178,7 @@
             </button>
           {/if}
           <button
-            title={cursorsActive ? L.remote_cursors_enabled() : L.remote_cursors_disabled()}
+            title={cursorsActive ? $L.remote_cursors_enabled() : $L.remote_cursors_disabled()}
             class="button {cursorsActive ? 'is-success' : 'is-danger'} {!displayStreamActive
               ? 'is-hidden'
               : ''}"
@@ -194,7 +194,7 @@
             <span class="icon">
               <i class="fas fa-unlink"></i>
             </span>
-            <span>{L.disconnect()}</span>
+            <span>{$L.disconnect()}</span>
           </button>
         </div>
       </div>
@@ -211,7 +211,7 @@
           <span class="icon">
             <i class="fas fa-play"></i>
           </span>
-          <span>{!sessionStarted ? L.start_a_new_session() : L.session_started()}</span>
+          <span>{!sessionStarted ? $L.start_a_new_session() : $L.session_started()}</span>
         </button>
       </div>
 
@@ -223,7 +223,7 @@
           <span class="icon">
             <i class="fas fa-unlink"></i>
           </span>
-          <span>{L.cancel()}</span>
+          <span>{$L.cancel()}</span>
         </button>
       </div>
 
@@ -237,7 +237,7 @@
           <span class="icon">
             <i class="fas fa-copy"></i>
           </span>
-          <span>{L.copy_my_connection_string()}</span>
+          <span>{$L.copy_my_connection_string()}</span>
         </button>
       </div>
     </div>
@@ -280,7 +280,7 @@
           <span class="icon">
             <i class="fas fa-link"></i>
           </span>
-          <span>{L.connect()} {connectionStringIsValid ? connectToUserName : ''} </span>
+          <span>{$L.connect()} {connectionStringIsValid ? connectToUserName : ''} </span>
         </button>
       </div>
     </div>

@@ -157,14 +157,14 @@
 <WebRTC bind:connectionState bind:this={webRTCComponent} />
 
 <div class="container p-5">
-  <h1 class="title">{!isStreaming ? L.join_a_session() : L.joined_a_session()}</h1>
+  <h1 class="title">{!isStreaming ? $L.join_a_session() : $L.joined_a_session()}</h1>
   <div class={!isStreaming ? 'is-hidden' : ''}>
     <div class="fixed-grid">
       <div class="grid">
         <div class="cell">
           <button
-            aria-label="{microphoneActive ? L.microphone_active() : L.microphone_inactive()}}"
-            title={microphoneActive ? L.microphone_active() : L.microphone_inactive()}
+            aria-label="{microphoneActive ? $L.microphone_active() : $L.microphone_inactive()}}"
+            title={microphoneActive ? $L.microphone_active() : $L.microphone_inactive()}
             class="button {microphoneActive ? 'is-success' : 'is-danger'}"
             on:click={onMicrophoneToggle}
           >
@@ -183,11 +183,15 @@
           </button>
         </div>
         <div class="cell has-text-right">
-          <button class="button is-danger" aria-label={L.disconnect()} on:click={onDisconnectClick}>
+          <button
+            class="button is-danger"
+            aria-label={$L.disconnect()}
+            on:click={onDisconnectClick}
+          >
             <span class="icon">
               <i class="fas fa-unlink"></i>
             </span>
-            <span>{L.disconnect()}</span>
+            <span>{$L.disconnect()}</span>
           </button>
         </div>
       </div>
@@ -200,7 +204,7 @@
           <div class="control has-icons-left has-icons-right">
             <input
               bind:value={$connectionString}
-              placeholder={L.host_connection_string()}
+              placeholder={$L.host_connection_string()}
               class="input {connectionStringIsValid === null
                 ? ''
                 : connectionStringIsValid
@@ -234,7 +238,7 @@
               <span class="icon">
                 <i class="fas fa-link"></i>
               </span>
-              <span>{L.connect()} {connectionStringIsValid ? connectToUserName : ''} </span>
+              <span>{$L.connect()} {connectionStringIsValid ? connectToUserName : ''} </span>
             </button>
           </div>
         </div>
@@ -248,7 +252,7 @@
             <span class="icon">
               <i class="fas fa-copy"></i>
             </span>
-            <span>{L.copy_my_connection_string()}</span>
+            <span>{$L.copy_my_connection_string()}</span>
           </button>
         </div>
       </div>
@@ -260,7 +264,7 @@
           <span class="icon">
             <i class="fas fa-unlink"></i>
           </span>
-          <span>{L.cancel()}</span>
+          <span>{$L.cancel()}</span>
         </button>
       </div>
     </div>
@@ -269,7 +273,7 @@
 
 <div class={!isStreaming ? 'is-hidden' : ''}>
   <div class="field">
-    <label class="label" for="remote_screen">{L.remote_screen()}</label>
+    <label class="label" for="remote_screen">{$L.remote_screen()}</label>
     <div class="control">
       <div class="video-overflow">
         <video bind:this={remoteScreen} id="remote_screen" class="video" autoplay playsinline muted
@@ -283,19 +287,19 @@
         <span class="icon">
           <i class="fas fa-search-plus"></i>
         </span>
-        <span>{L.zoom_in()}</span>
+        <span>{$L.zoom_in()}</span>
       </button>
       <button class="button is-info" on:click={onZoomOutClick}>
         <span class="icon">
           <i class="fas fa-search-minus"></i>
         </span>
-        <span>{L.zoom_out()}</span>
+        <span>{$L.zoom_out()}</span>
       </button>
       <button class="button is-info" on:click={onFullscreenClick}>
         <span class="icon">
           <i class="fas fa-expand"></i>
         </span>
-        <span>{L.fullscreen()}</span>
+        <span>{$L.fullscreen()}</span>
       </button>
     </div>
   </div>
