@@ -77,6 +77,44 @@
     remoteCursorPositionsEnabled = enabled
     return enabled
   }
+
+  const ICE_GATHERING_TIMEOUT_MS = 10000
+
+  const waitForIceGatheringComplete = async (): Promise<void> => {
+    if (!pc) return
+    if (pc.iceGatheringState === 'complete') return
+    await new Promise<void>((resolve) => {
+      const cleanup = (): void => {
+        pc?.removeEventListener('icegatheringstatechange', onStateChange)
+        clearTimeout(timeoutId)
+      }
+      const onStateChange = (): void => {
+        if (pc?.iceGatheringState === 'complete') {
+          cleanup()
+          resolve()
+        }
+      }
+      const timeoutId = setTimeout(() => {
+        cleanup()
+        console.warn('ICE gathering timed out; continuing with current candidates')
+        resolve()
+      }, ICE_GATHERING_TIMEOUT_MS)
+      pc.addEventListener('icegatheringstatechange', onStateChange)
+      onStateChange()
+    })
+  }
+
+  const addGuestAudioTracks = (): void => {
+    if (!pc || !audioStream || !userSettings) return
+    const senders = pc.getSenders()
+    for (const track of audioStream.getTracks()) {
+      track.enabled = userSettings.isMicrophoneEnabledOnConnect
+      if (!senders.some((sender) => sender.track?.id === track.id)) {
+        pc.addTrack(track, audioStream)
+      }
+    }
+  }
+
   export async function Setup(v: HTMLVideoElement = null): Promise<void> {
     userSettings = await window.BananasApi.getSettings()
     remoteVideo = v
@@ -141,38 +179,40 @@
       } catch (e) {
         errorHander(e)
       }
-    } else {
-      if (audioStream) {
-        for (const track of audioStream.getTracks()) {
-          track.enabled = userSettings.isMicrophoneEnabledOnConnect
-          pc.addTrack(track, audioStream)
-        }
-      }
     }
   }
   export async function CreateParticipantUrl(
     c: RTCSessionDescriptionOptions,
     data: { username: string }
   ): Promise<string> {
-    try {
-      const desc = new RTCSessionDescription(c)
-      await pc.setRemoteDescription(desc)
-      if (desc.type === 'offer') {
-        const answer = await pc.createAnswer()
-        await pc.setLocalDescription(answer)
+    if (pc?.localDescription?.type !== 'answer') {
+      try {
+        const desc = new RTCSessionDescription(c)
+        await pc.setRemoteDescription(desc)
+        if (remoteVideo) {
+          addGuestAudioTracks()
+        }
+        if (desc.type === 'offer') {
+          const answer = await pc.createAnswer()
+          await pc.setLocalDescription(answer)
+        }
+      } catch (e) {
+        errorHander(e)
       }
-    } catch (e) {
-      errorHander(e)
     }
+    await waitForIceGatheringComplete()
     return await getConnectionString(ConnectionType.PARTICIPANT, pc.localDescription, data)
   }
   export async function CreateHostUrl(data: { username: string }): Promise<string> {
-    remoteMouseCursorPositionsChannel = pc.createDataChannel('remoteMouseCursorPositions')
-    remoteCursorPingChannel = pc.createDataChannel('remoteCursorPing')
-    setupDataChannel(remoteMouseCursorPositionsChannel)
-    setupDataChannel(remoteCursorPingChannel)
-    const desc = await pc.createOffer()
-    await pc.setLocalDescription(desc)
+    if (pc?.localDescription?.type !== 'offer') {
+      remoteMouseCursorPositionsChannel = pc.createDataChannel('remoteMouseCursorPositions')
+      remoteCursorPingChannel = pc.createDataChannel('remoteCursorPing')
+      setupDataChannel(remoteMouseCursorPositionsChannel)
+      setupDataChannel(remoteCursorPingChannel)
+      const desc = await pc.createOffer()
+      await pc.setLocalDescription(desc)
+    }
+    await waitForIceGatheringComplete()
     return await getConnectionString(ConnectionType.HOST, pc.localDescription, data)
   }
   export function ToggleDisplayStream(): void {
@@ -201,6 +241,9 @@
     try {
       const desc = new RTCSessionDescription(c)
       await pc.setRemoteDescription(desc)
+      if (remoteVideo) {
+        addGuestAudioTracks()
+      }
       if (desc.type === 'offer') {
         const answer = await pc.createAnswer()
         await pc.setLocalDescription(answer)

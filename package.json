@@ -1,6 +1,6 @@
 {
   "name": "bananas",
-  "version": "0.0.22",
+  "version": "0.1.0",
   "description": "Bananas Screen Sharing is a simple and easy-to-use screen sharing tool for Mac, Windows, and Linux.",
   "main": "./out/main/index.js",
   "author": {
@@ -10,6 +10,7 @@
   "license": "MIT",
   "homepage": "https://getbananas.net",
   "scripts": {
+    "install:electron": "bun run ./node_modules/electron/install.js",
     "format": "prettier --plugin prettier-plugin-svelte --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
