@@ -1,6 +1,6 @@
 {
   "name": "bananas",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bananas Screen Sharing is a simple and easy-to-use screen sharing tool for Mac, Windows, and Linux.",
   "main": "./out/main/index.js",
   "author": {

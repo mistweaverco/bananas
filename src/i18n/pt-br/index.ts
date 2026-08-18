@@ -1,0 +1,52 @@
+import type { BaseTranslation } from '../i18n-types'
+
+const pt_br = {
+  about: 'Sobre',
+  advanced: 'Avançado',
+  basic: 'Básico',
+  cancel: 'Cancelar',
+  choose_a_color: 'Escolha uma cor',
+  code_of_conduct: 'Código de Ética',
+  color: 'Cor',
+  connect: 'Conectar',
+  connection_established: 'Conexão Estabelecida',
+  copy_my_connection_string: 'Copiar minha chave de conexão',
+  disconnect: 'Desconectar',
+  fullscreen: 'Tela Cheia',
+  host_a_session: 'Hostear uma Sessão',
+  host_connection_string: 'Chave de conexão do Host',
+  hosting_a_session: 'Hosteando uma sessão',
+  is_microphone_active_on_connect: 'Microfone ligado ao se conectar',
+  join_a_session: 'Entrar em uma sessão',
+  joined_a_session: 'Em uma sessão',
+  language: 'Idioma',
+  language_description:
+    'Escolha seu idioma de preferência (depois de mudar o idioma, é necessário reiniciar o aplicativo)',
+  media: 'Mídia',
+  microphone_active: 'Microfone ligado',
+  microphone_inactive: 'Microfone desligado',
+  not_streaming_your_display: 'Não está transmitindo sua tela',
+  participant_connection_string: 'Chave de conexão do participante',
+  privacty_policy: 'Política de Privacidade',
+  remote_cursors_disabled: 'Cursor remoto desativado',
+  remote_cursors_enabled: 'Cursor remoto ativado',
+  remote_screen: 'Transmissão de Tela',
+  report_a_bug: 'Reportar um bug',
+  save: 'Salvar',
+  see_the_code: 'Código Fonte',
+  session_started: 'Sessão iniciada',
+  settings: 'Configurações',
+  shoulders_of_giants: 'Nossos Ombros de Gigantes',
+  shoulders_of_giants_description:
+    'Bananas Screen Sharing foi construído e desenvolvido em cima desses projetos open-source a seguir (sem ordem específica)',
+  start_a_new_session: 'Iniciar uma sessão',
+  streaming_your_display: 'Transmitindo sua tela',
+  stun_turn_server_objects: 'Objetos de servidor STUN/TURN (separado por linhas)',
+  terms_of_service: 'Termos de Uso e Serviço',
+  username: 'Nome de Usuário',
+  website: 'Website',
+  zoom_in: 'Aumentar o Zoom',
+  zoom_out: 'Diminuir o Zoom'
+} satisfies BaseTranslation
+
+export default pt_br
