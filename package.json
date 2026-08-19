@@ -57,7 +57,6 @@
     "electron-vite": "^2.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-svelte": "^2.41.0",
-    "kit-monorepo": "github:sveltejs/kit",
     "prettier": "^3.3.2",
     "prettier-plugin-svelte": "^3.2.5",
     "svelte": "4.2.19",
