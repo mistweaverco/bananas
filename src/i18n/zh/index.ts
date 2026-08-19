@@ -24,6 +24,7 @@ const zh = {
   media: '媒体',
   microphone_active: '打开麦克风',
   microphone_inactive: '关闭麦克风',
+  no_screens_found: '未找到可共享的屏幕',
   not_streaming_your_display: '不要流失传输您的显示器',
   participant_connection_string: '参与者的连接码',
   privacty_policy: '隐私政策',
@@ -32,7 +33,11 @@ const zh = {
   remote_screen: '远程屏幕',
   report_a_bug: '报告一个错误',
   save: '保存',
+  screen_share_failed: '无法开始屏幕共享',
+  screens: '屏幕',
   see_the_code: '查看代码',
+  share: '共享',
+  share_your_screen: '共享您的屏幕',
   session_started: '共享已开始',
   settings: '设置',
   shoulders_of_giants: '巨人的肩膀',
@@ -44,6 +49,7 @@ const zh = {
   terms_of_service: '服务条款',
   username: '用户名',
   website: '网站',
+  windows: '窗口',
   zoom_in: '放大',
   zoom_out: '缩小'
 } satisfies Translation

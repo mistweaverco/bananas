@@ -25,6 +25,7 @@ const fr = {
   media: 'Médias',
   microphone_active: 'Microphone actif',
   microphone_inactive: 'Microphone inactif',
+  no_screens_found: 'Aucun écran n’a été trouvé à partager',
   not_streaming_your_display: 'Ne diffuse pas votre écran',
   participant_connection_string: 'Chaîne de connexion du participant',
   privacty_policy: 'Politique de confidentialité',
@@ -33,7 +34,11 @@ const fr = {
   remote_screen: 'Écran distant',
   report_a_bug: 'Signaler un bug',
   save: 'Enregistrer',
+  screen_share_failed: 'Impossible de démarrer le partage d’écran',
+  screens: 'Écrans',
   see_the_code: 'Voir le code',
+  share: 'Partager',
+  share_your_screen: 'Partager votre écran',
   session_started: 'Session commencée',
   settings: 'Paramètres',
   shoulders_of_giants: 'Épaules des géants',
@@ -45,6 +50,7 @@ const fr = {
   terms_of_service: 'Conditions de service',
   username: 'Nom d’utilisateur',
   website: 'Site web',
+  windows: 'Fenêtres',
   zoom_in: 'Zoomer',
   zoom_out: 'Dézoomer'
 } satisfies BaseTranslation

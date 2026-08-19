@@ -115,7 +115,7 @@
     }
   }
 
-  export async function Setup(v: HTMLVideoElement = null): Promise<void> {
+  export async function Setup(v: HTMLVideoElement = null): Promise<'ok' | 'cancelled' | 'failed'> {
     userSettings = await window.BananasApi.getSettings()
     remoteVideo = v
     audioElement = document.createElement('audio')
@@ -153,6 +153,26 @@
     pc.oniceconnectionstatechange = function (): void {
       connectionState = pc.iceConnectionState
     }
+    if (!remoteVideo) {
+      try {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: false
+        })
+        if (!stream?.getVideoTracks().length) {
+          return 'failed'
+        }
+        for (const track of stream.getTracks()) {
+          pc.addTrack(track, stream)
+        }
+      } catch (e) {
+        if (e && typeof e === 'object' && 'name' in e && e.name === 'NotAllowedError') {
+          return 'cancelled'
+        }
+        errorHander(e)
+        return 'failed'
+      }
+    }
     try {
       audioStream = await navigator.mediaDevices.getUserMedia({
         video: false,
@@ -161,25 +181,13 @@
     } catch (e) {
       errorHander(e)
     }
-    if (!remoteVideo) {
-      try {
-        stream = await navigator.mediaDevices.getDisplayMedia({
-          video: true,
-          audio: false
-        })
-        for (const track of stream.getTracks()) {
-          pc.addTrack(track, stream)
-        }
-        if (audioStream) {
-          for (const track of audioStream.getTracks()) {
-            track.enabled = userSettings.isMicrophoneEnabledOnConnect
-            pc.addTrack(track, stream)
-          }
-        }
-      } catch (e) {
-        errorHander(e)
+    if (!remoteVideo && stream && audioStream) {
+      for (const track of audioStream.getTracks()) {
+        track.enabled = userSettings.isMicrophoneEnabledOnConnect
+        pc.addTrack(track, stream)
       }
     }
+    return 'ok'
   }
   export async function CreateParticipantUrl(
     c: RTCSessionDescriptionOptions,

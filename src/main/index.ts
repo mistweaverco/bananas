@@ -1,10 +1,11 @@
-import { app, shell, BrowserWindow, session, desktopCapturer } from 'electron'
+import { app, shell, BrowserWindow } from 'electron'
 import path from 'path'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { windowStateKeeper } from './stateKeeper'
 import { ipcMainHandlersInit } from './ipcMainHandlers'
+import { installDisplayMediaHandler } from './screenPicker'
 import { isInProductionMode } from './utils'
 
 const CUSTOM_PROTOCOL = 'bananas'
@@ -70,11 +71,7 @@ async function createWindow(): Promise<void> {
 
   mainWindowState.track(MAIN_WINDOW)
 
-  session.defaultSession.setDisplayMediaRequestHandler((_, callback) => {
-    desktopCapturer.getSources({ types: ['screen'] }).then((sources) => {
-      callback({ video: sources[0] })
-    })
-  })
+  installDisplayMediaHandler(() => MAIN_WINDOW)
 
   MAIN_WINDOW.on('ready-to-show', () => {
     MAIN_WINDOW.show()

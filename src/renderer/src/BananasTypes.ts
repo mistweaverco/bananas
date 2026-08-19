@@ -18,3 +18,11 @@ export type SettingsData = {
   isMicrophoneEnabledOnConnect: boolean
   iceServers: IceServer[]
 }
+
+export type ScreenShareSource = {
+  id: string
+  name: string
+  thumbnail: string
+  appIcon: string | null
+  isScreen: boolean
+}

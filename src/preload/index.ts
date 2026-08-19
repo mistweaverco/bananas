@@ -25,6 +25,28 @@ type IceServer = {
   credential?: string
 }
 
+export type ScreenShareSource = {
+  id: string
+  name: string
+  thumbnail: string
+  appIcon: string | null
+  isScreen: boolean
+}
+
+type SelectScreenShareSourceHandler = (sources: ScreenShareSource[]) => Promise<string | null>
+
+let selectScreenShareSourceHandler: SelectScreenShareSourceHandler | null = null
+
+ipcRenderer.on(
+  'selectScreenShareSource',
+  async (_, payload: { requestId: number; sources: ScreenShareSource[] }) => {
+    const sourceId = selectScreenShareSourceHandler
+      ? await selectScreenShareSourceHandler(payload.sources)
+      : (payload.sources.find((source) => source.isScreen)?.id ?? payload.sources[0]?.id ?? null)
+    ipcRenderer.send('screenShareSourceSelected', { requestId: payload.requestId, sourceId })
+  }
+)
+
 const BananasApi = {
   getAppVersion: async (): Promise<string> => {
     return await ipcRenderer.invoke('getAppVersion')
@@ -63,6 +85,9 @@ const BananasApi = {
     y: number
   }): Promise<void> => {
     ipcRenderer.invoke('updateRemoteCursor', state)
+  },
+  onSelectScreenShareSource: (handler: SelectScreenShareSourceHandler): void => {
+    selectScreenShareSourceHandler = handler
   }
 }
 

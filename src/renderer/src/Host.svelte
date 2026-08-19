@@ -26,6 +26,7 @@
   let connectionString = useHostUrl()
   let hasAudioInput = false
   let visualizerIsActive: boolean = true
+  let startingSession = false
 
   const onConnectionStringChange = async (): Promise<void> => {
     if ($connectionString === '') {
@@ -103,11 +104,25 @@
     })
   })
   const onStartSessionButtonClick = async (): Promise<void> => {
-    await webRTCComponent.Setup()
-    sessionStarted = true
-    $navigationEnabled = false
-    $isHosting = true
-    hasAudioInput = webRTCComponent.HasAudioInput()
+    if (startingSession) return
+    startingSession = true
+    try {
+      const setupResult = await webRTCComponent.Setup()
+      if (setupResult === 'cancelled') return
+      if (setupResult !== 'ok') {
+        Swal.fire({
+          icon: 'error',
+          title: L.screen_share_failed()
+        })
+        return
+      }
+      sessionStarted = true
+      $navigationEnabled = false
+      $isHosting = true
+      hasAudioInput = webRTCComponent.HasAudioInput()
+    } finally {
+      startingSession = false
+    }
   }
   const reset = (): void => {
     $connectionString = ''
@@ -204,8 +219,10 @@
     <div class="grid">
       <div class="cell">
         <button
-          class="button is-link {isStreaming ? 'is-hidden' : ''}"
-          disabled={sessionStarted}
+          class="button is-link {isStreaming ? 'is-hidden' : ''} {startingSession
+            ? 'is-loading'
+            : ''}"
+          disabled={sessionStarted || startingSession}
           on:click={onStartSessionButtonClick}
         >
           <span class="icon">

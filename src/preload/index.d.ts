@@ -6,6 +6,14 @@ type IceServer = {
   credential?: string
 }
 
+type ScreenShareSource = {
+  id: string
+  name: string
+  thumbnail: string
+  appIcon: string | null
+  isScreen: boolean
+}
+
 declare global {
   interface Window {
     electron: ElectronAPI
@@ -32,6 +40,9 @@ declare global {
         iceServers: IceServer[]
       }>
       getAppVersion: () => Promise<string>
+      onSelectScreenShareSource: (
+        handler: (sources: ScreenShareSource[]) => Promise<string | null>
+      ) => void
     }
   }
 }

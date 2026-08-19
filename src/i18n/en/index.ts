@@ -25,6 +25,7 @@ const en = {
   media: 'Media',
   microphone_active: 'Microphone active',
   microphone_inactive: 'Microphone inactive',
+  no_screens_found: 'No screens were found to share',
   not_streaming_your_display: 'Not streaming your display',
   participant_connection_string: 'Participant connection string',
   privacty_policy: 'Privacy policy',
@@ -33,7 +34,11 @@ const en = {
   remote_screen: 'Remote screen',
   report_a_bug: 'Report a bug',
   save: 'Save',
+  screen_share_failed: 'Could not start screen sharing',
+  screens: 'Screens',
   see_the_code: 'See the code',
+  share: 'Share',
+  share_your_screen: 'Share your screen',
   session_started: 'Session started',
   settings: 'Settings',
   shoulders_of_giants: 'Shoulders of giants',
@@ -45,6 +50,7 @@ const en = {
   terms_of_service: 'Terms of service',
   username: 'Username',
   website: 'Website',
+  windows: 'Windows',
   zoom_in: 'Zoom in',
   zoom_out: 'Zoom out'
 } satisfies BaseTranslation

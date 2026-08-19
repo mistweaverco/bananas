@@ -4,6 +4,7 @@
   import Host from './Host.svelte'
   import Settings from './Settings.svelte'
   import About from './About.svelte'
+  import ScreenPicker from './ScreenPicker.svelte'
   import {
     useActiveView,
     useNavigationEnabled,
@@ -13,12 +14,18 @@
     useHostUrl
   } from './stores'
   import { getDataFromBananasUrl } from './Utils'
+  import { onMount } from 'svelte'
   const activeView = useActiveView()
   const participantUrl = useParticipantUrl()
   const hostUrl = useHostUrl()
   const isHosting = useIsHosting()
   useNavigationEnabled()
   useIsWatching()
+  let screenPicker: ScreenPicker
+
+  onMount(() => {
+    window.BananasApi.onSelectScreenShareSource((sources) => screenPicker.pick(sources))
+  })
   window.onmessage = async (evt: MessageEvent): Promise<void> => {
     const { data } = evt
     if (data.type !== 'openBananasURL') return
@@ -47,3 +54,5 @@
 {:else if $activeView === 'about'}
   <About />
 {/if}
+
+<ScreenPicker bind:this={screenPicker} />

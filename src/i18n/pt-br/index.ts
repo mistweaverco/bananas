@@ -25,6 +25,7 @@ const pt_br = {
   media: 'Mídia',
   microphone_active: 'Microfone ligado',
   microphone_inactive: 'Microfone desligado',
+  no_screens_found: 'Nenhuma tela foi encontrada para compartilhar',
   not_streaming_your_display: 'Não está transmitindo sua tela',
   participant_connection_string: 'Chave de conexão do participante',
   privacty_policy: 'Política de Privacidade',
@@ -33,7 +34,11 @@ const pt_br = {
   remote_screen: 'Transmissão de Tela',
   report_a_bug: 'Reportar um bug',
   save: 'Salvar',
+  screen_share_failed: 'Não foi possível iniciar o compartilhamento de tela',
+  screens: 'Telas',
   see_the_code: 'Código Fonte',
+  share: 'Compartilhar',
+  share_your_screen: 'Compartilhar sua tela',
   session_started: 'Sessão iniciada',
   settings: 'Configurações',
   shoulders_of_giants: 'Nossos Ombros de Gigantes',
@@ -45,6 +50,7 @@ const pt_br = {
   terms_of_service: 'Termos de Uso e Serviço',
   username: 'Nome de Usuário',
   website: 'Website',
+  windows: 'Janelas',
   zoom_in: 'Aumentar o Zoom',
   zoom_out: 'Diminuir o Zoom'
 } satisfies BaseTranslation
